@@ -1,3 +1,3 @@
-# snapventure
+# Snapventure
 
-Simple journey creator with qrcodes as nodes
+Une interface web permettant de créer des parcours dont les étapes sont des qrcodes.
