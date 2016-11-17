@@ -1,0 +1,22 @@
+<h1>Scan page simulation</h1>
+
+<p>
+(see logs for infos)
+</p>
+
+<ul>
+
+  {% for step in journeySteps %}
+  <li>{{step.name}} <a href="/snapventure/scan/{{step.qrcode_uuid}}">{{step.qrcode_uuid}}</a></li>
+  {% endfor %}
+
+</ul>
+
+<p>
+The actual tested uid :
+<i>{{uid}}</i>
+</p>
+
+<p>
+{{img}}
+</p>

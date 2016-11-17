@@ -1,0 +1,8 @@
+
+# My virtual env
+djangoenv/
+qrcodes/*
+
+
+.env
+*.pyc

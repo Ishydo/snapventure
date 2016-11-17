@@ -1,0 +1,39 @@
+<h1>Snapventure data analysis test</h1>
+<p>
+  Based on the test_journey.json fixture.
+</p>
+
+
+<h3>The users are</h3>
+<p>List of users</p>
+
+<ul>
+{% for u in users %}
+<li>{{u.username}}</li>
+{% endfor %}
+</ul>
+
+
+<h3>The journey is</h3>
+<p>The journey informations</p>
+
+<p>
+  {{journey.name}}
+</p>
+<p>
+  {{journey.description}}
+</p>
+
+<h3>What are the steps ?</h3>
+<p>A list of the steps of this journey</p>
+
+<ul>
+{% for s in steps %}
+<li>{{s.name}} (Root : {{s.root}} - Final : {{s.final}})</li>
+{% endfor %}
+</ul>
+
+<h3>What happens if user1 scans step4 ?</h3>
+
+
+<h3>What happens if user1 scans step5 ?</h3>
