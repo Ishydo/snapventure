@@ -1,7 +1,7 @@
 
 # My virtual env
 djangoenv/
-qrcodes/*
+/qrcodes/*.jpg
 
 
 .env
