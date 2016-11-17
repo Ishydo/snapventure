@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/DomDomPow/snapventure.png?label=ready&title=Ready)](https://waffle.io/DomDomPow/snapventure)
 # Snapventure
 
 Une interface web qui permet de créer des parcours dont les étapes sont des représentées par des qrcodes. 
