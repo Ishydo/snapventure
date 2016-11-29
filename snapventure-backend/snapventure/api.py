@@ -8,7 +8,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
     queryset = models.Profile.objects.all()
     serializer_class = serializers.ProfileSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated] # Here are the difinitions of permissions
 
 
 class JourneyViewSet(viewsets.ModelViewSet):

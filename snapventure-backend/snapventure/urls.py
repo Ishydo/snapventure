@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 from . import views
-
+from rest_framework.authtoken import views as rviews
 from django.conf.urls import url, include
 from rest_framework import routers
 import api
@@ -21,6 +21,10 @@ router.register(r'scan', api.ScanViewSet)
 urlpatterns = (
     # urls for Django Rest Framework API
     url(r'^api/v1/', include(router.urls)),
+)
+
+urlpatterns += (
+    url(r'^api-token-auth/', rviews.obtain_auth_token),
 )
 
 urlpatterns += (
