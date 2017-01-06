@@ -42,7 +42,7 @@ urlpatterns = [
 
     # Pages URLs
     url(r'^dashboard', views.Dashboard.as_view(), name="dashboard"),        # User Dashboard
-    #url(r'^', views.Home.as_view(), name="homepage"),                       # Default homepage
+    url(r'^', views.Home.as_view(), name="homepage"),                       # Default homepage
 ]
 
 
