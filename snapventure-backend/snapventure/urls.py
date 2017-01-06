@@ -46,7 +46,6 @@ urlpatterns = [
 ]
 
 
-
 # Testing / Debug URLs
 #urlpatterns += (
     #url(r'^$', views.Index.as_view(), name='index'),
