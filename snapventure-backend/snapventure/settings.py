@@ -27,11 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-# User successful login redirection
-LOGIN_REDIRECT_URL = "/dashboard"
-
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
