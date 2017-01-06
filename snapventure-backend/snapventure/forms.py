@@ -16,8 +16,8 @@ class ProfileForm(forms.ModelForm):
 class JourneyForm(forms.ModelForm):
     class Meta:
         model = Journey
-        fields = ['name', 'description', 'img_description', 'img_ambiance', 'start_time', 'end_time', 'private', 'active', 'deleted', 'creator', 'inscriptions']
-
+        fields = ['name', 'description', 'img_description', 'img_ambiance', 'start_time', 'end_time', 'private', 'active', 'creator']
+        widgets = {'creator': forms.HiddenInput()}
 
 class InscriptionForm(forms.ModelForm):
     class Meta:

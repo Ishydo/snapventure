@@ -1,0 +1,56 @@
+{% extends 'snapventure/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+  <p>
+    This is your dasboard {{current_user.email}}
+  </p>
+
+<div class="row">
+
+<h2>Your profile</h2>
+<p>
+  <a href="{% url 'journey_create' %}">Create a new Journey</a>
+</p>
+
+</div>
+
+<div class="row">
+
+<h2>Your journeys</h2>
+
+{% for journey in journeys %}
+<div class="panel panel-default">
+  <div class="panel-body">
+
+    <div class="col-md-12">
+      <div class="col-md-2">
+        <img src="{{ journey.img_description.url }}" class="img img-responsive img-rounded">
+      </div>
+
+      <div class="col-md-10">
+        <h2>{{ journey.name }}</h2>
+        <p>{{ journey.description }}</p>
+        <p>Steps : {{ journey.step_set.count }} | Subscribers : {{ journey.inscription_set.count }}</p>
+      </div>
+
+    </div>
+  </div>
+  <div class="panel-footer">
+    <a href="{% url 'step_create' %}">Add step</a>
+    <a href="{% url 'journey_update' journey.slug %}">Edit</a>
+    <a href="{% url 'journey_delete' journey.slug %}">Delete</a>
+  </div>
+</div>
+{% empty %}
+    <li>Your journey list is empty.</li>
+{% endfor %}
+
+
+</div>
+
+</div>
+
+
+{% endblock %}

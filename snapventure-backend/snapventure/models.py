@@ -7,6 +7,9 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from django.core.urlresolvers import reverse
+from django.utils.text import slugify
+
 from django.conf import settings
 from rest_framework.authtoken.models import Token
 
@@ -41,22 +44,25 @@ class Journey(models.Model):
 
     # Fields
     name = models.CharField(max_length=255)
+    slug = models.SlugField()
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
     description = models.TextField()
-    img_description = models.ImageField(blank=True)
-    img_ambiance = models.ImageField(blank=True)
+    img_description = models.ImageField(blank=True, upload_to='uploads/img/journey_description', default = 'uploads/img/default/journey-placeholder.png')
+    img_ambiance = models.ImageField(blank=True, upload_to='uploads/img/journey_ambiance', default = 'uploads/img/default/journey-placeholder.png')
     start_time = models.DateTimeField(blank=True, null=True)
     end_time = models.DateTimeField(blank=True, null=True)
-    private = models.BooleanField()
-    active = models.BooleanField()
-    deleted = models.BooleanField()
+    private = models.BooleanField(default=False)
+    active = models.BooleanField(default=True)
+    deleted = models.BooleanField(default=False)
     creator = models.ForeignKey(Profile, related_name="creator_of_journey")
     inscriptions = models.ManyToManyField(
         Profile,
         through='Inscription',
         through_fields=('journey', 'profile'),
     )
+
+    prepopulated_fields = {"slug": ("name",)}
 
     class Meta:
         ordering = ('-created',)
@@ -65,11 +71,18 @@ class Journey(models.Model):
         return u'%s' % self.name
 
     def get_absolute_url(self):
-        return reverse('snapventure_journey_detail', args=(self.name,))
-
+        return reverse('journey_detail', args=(self.slug,))
 
     def get_update_url(self):
-        return reverse('snapventure_journey_update', args=(self.name,))
+        return reverse('journey_update', args=(self.slug,))
+
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            # Newly created object, so set slug
+            self.slug = slugify(self.name)
+
+        super(Journey, self).save(*args, **kwargs)
 
 class Inscription(models.Model):
     created = models.DateTimeField(auto_now_add=True, editable=False)
@@ -103,6 +116,7 @@ class Step(models.Model):
 
     # Fields
     name = models.CharField(max_length=255)
+    slug = models.SlugField()
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
     content_text = models.TextField()
@@ -127,11 +141,12 @@ class Step(models.Model):
         return u'%s' % self.name
 
     def get_absolute_url(self):
-        return reverse('snapventure_step_detail', args=(self.name,))
-
+        return reverse('step_detail', args=(self.slug,))
 
     def get_update_url(self):
-        return reverse('snapventure_step_update', args=(self.name,))
+        return reverse('step_update', args=(self.slug,))
+
+    prepopulated_fields = {"slug": ("name",)}
 
 
 class Edge(models.Model):

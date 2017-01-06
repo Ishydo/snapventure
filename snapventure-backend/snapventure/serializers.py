@@ -70,7 +70,6 @@ class StepSerializer(serializers.ModelSerializer):
             'last_updated',
             'content_text',
             'content_url',
-            'order_id',
             'journey',
             'qrcode_uuid',
             'final',

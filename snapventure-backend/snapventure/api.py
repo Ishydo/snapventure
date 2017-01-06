@@ -16,7 +16,7 @@ class JourneyViewSet(viewsets.ModelViewSet):
 
     queryset = models.Journey.objects.all()
     serializer_class = serializers.JourneySerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 
 class InscriptionViewSet(viewsets.ModelViewSet):
@@ -32,7 +32,7 @@ class TypeViewSet(viewsets.ModelViewSet):
 
     queryset = models.Type.objects.all()
     serializer_class = serializers.TypeSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 
 class StepViewSet(viewsets.ModelViewSet):
@@ -40,7 +40,7 @@ class StepViewSet(viewsets.ModelViewSet):
 
     queryset = models.Step.objects.all()
     serializer_class = serializers.StepSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 
 class ScanViewSet(viewsets.ModelViewSet):

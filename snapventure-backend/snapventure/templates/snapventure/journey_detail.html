@@ -1,0 +1,23 @@
+{% extends 'snapventure/base.html' %}
+
+{% block content %}
+
+<p><a class="btn btn-default" href="{% url 'journey_list' %}">Journey Listing</a></p>
+<table class="table">
+<tr><td>name</td><td>{{ object.name }}</td></tr>
+<tr><td>created</td><td>{{ object.created }}</td></tr>
+<tr><td>last_updated</td><td>{{ object.last_updated }}</td></tr>
+<tr><td>description</td><td>{{ object.description }}</td></tr>
+<tr><td>img_description</td><td>{{ object.img_description }}</td></tr>
+<tr><td>img_ambiance</td><td>{{ object.img_ambiance }}</td></tr>
+<tr><td>start_time</td><td>{{ object.start_time }}</td></tr>
+<tr><td>end_time</td><td>{{ object.end_time }}</td></tr>
+<tr><td>private</td><td>{{ object.private }}</td></tr>
+<tr><td>active</td><td>{{ object.active }}</td></tr>
+<tr><td>deleted</td><td>{{ object.deleted }}</td></tr>
+</table>
+<a class="btn btn-primary" href="{{object.get_update_url}}">Edit Journey</a>
+
+
+
+{% endblock %}
