@@ -1,22 +1,59 @@
 {% extends 'snapventure/base.html' %}
 
+{% load static %}
+
 {% block content %}
 
-<p><a class="btn btn-default" href="{% url 'journey_list' %}">Journey Listing</a></p>
-<table class="table">
-<tr><td>name</td><td>{{ object.name }}</td></tr>
-<tr><td>created</td><td>{{ object.created }}</td></tr>
-<tr><td>last_updated</td><td>{{ object.last_updated }}</td></tr>
-<tr><td>description</td><td>{{ object.description }}</td></tr>
-<tr><td>img_description</td><td>{{ object.img_description }}</td></tr>
-<tr><td>img_ambiance</td><td>{{ object.img_ambiance }}</td></tr>
-<tr><td>start_time</td><td>{{ object.start_time }}</td></tr>
-<tr><td>end_time</td><td>{{ object.end_time }}</td></tr>
-<tr><td>private</td><td>{{ object.private }}</td></tr>
-<tr><td>active</td><td>{{ object.active }}</td></tr>
-<tr><td>deleted</td><td>{{ object.deleted }}</td></tr>
-</table>
-<a class="btn btn-primary" href="{{object.get_update_url}}">Edit Journey</a>
+
+<div class="container-fluid" style="background-image:url('{{ object.img_ambiance.url }}'); background-size:cover; padding: 0px;">
+  <div class="container-fluid" style="background-color: rgba(0,0,0,.6); color: white; padding: 5% 0% 5% 0%;">
+    <div class="container">
+
+      <div class="col-md-12">
+        <h1>{{ object.name }}</h1>
+      </div>
+
+    </div>
+  </div>
+</div>
+<br/>
+<div class="container">
+
+  <div class="col-md-9" style="font-size: 15pt; text-align:justify;">
+    {{ object.description|safe }}
+
+    <hr/>
+
+    <h2>Steps of this journey</h2>
+    {% for step in object.step_set.all %}
+
+    <div class="panel panel-default">
+      <div class="panel-body">
+      {{ step.name }}
+    </div>
+    </div>
+
+    {% endfor %}
+
+  </div>
+
+  <div class="col-md-3">
+
+    <p>Other informations</p>
+
+    Creation : {{ object.created }}<br/>
+    Updated : {{ object.last_updated }}<br/>
+    Start time: {{ object.start_time }}<br/>
+    End time:{{ object.end_time }}<br/>
+    Private :{{ object.private }}<br/>
+    Active: {{ object.active }}<br/>
+
+    <a class="btn btn-default" href="{% url 'journey_list' %}">Journey Listing</a>
+    <a class="btn btn-primary" href="{{object.get_update_url}}">Edit Journey</a>
+
+
+  </div>
+</div>
 
 
 
