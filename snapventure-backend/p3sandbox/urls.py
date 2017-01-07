@@ -20,7 +20,10 @@ from django.conf import settings
 
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(r'^grappelli/', include('grappelli.urls')),
+    url(r'^admin/', include([
+    url(r'^', include(admin.site.urls)),
+])),
 ]
 
 if settings.DEBUG:
