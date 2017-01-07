@@ -1,6 +1,9 @@
 from django import forms
 from .models import Profile, Journey, Inscription, Type, Step, Scan
 from django.contrib.auth.models import User
+#from django.forms.models import modelformset_factory
+from django.forms import modelformset_factory
+from tinymce.widgets import TinyMCE
 
 class UserForm(forms.ModelForm):
     class Meta:
@@ -16,8 +19,8 @@ class ProfileForm(forms.ModelForm):
 class JourneyForm(forms.ModelForm):
     class Meta:
         model = Journey
-        fields = ['name', 'description', 'img_description', 'img_ambiance', 'start_time', 'end_time', 'private', 'active', 'creator']
-        widgets = {'creator': forms.HiddenInput()}
+        fields = ['name', 'description', 'img_description', 'img_ambiance', 'start_time', 'end_time', 'private', 'active']
+        widgets = {'description': TinyMCE(attrs={'cols': 80, 'rows': 30})}
 
 class InscriptionForm(forms.ModelForm):
     class Meta:
@@ -35,8 +38,9 @@ class StepForm(forms.ModelForm):
     class Meta:
         model = Step
         fields = ['name', 'content_text', 'content_url', 'final', 'content_type', 'journey']
-        widgets = {'journey': forms.HiddenInput()}
+        #widgets = {'journey': forms.HiddenInput(), 'content_type': forms.HiddenInput()}
 
+StepFormSet = modelformset_factory(Step, fields=['name', 'content_text'])
 
 class ScanForm(forms.ModelForm):
     class Meta:
