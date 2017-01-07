@@ -2,54 +2,109 @@
 {% load static %}
 {% block content %}
 
+
+<div class="jumbotron" style="margin-top: -25px;">
+  <div class="container">
+    <h1>Build the adventure</h1>
+    <p>Snapventure allows you to build and manage journeys for people.</p>
+    <p>
+      <a class="btn btn-default btn-lg" href="{% url 'journey_create' %}" role="button">Create a new journey</a>
+      <a class="btn btn-default btn-lg" href="{% url 'journey_create' %}" role="button">Manage your journeys</a>
+      <a class="btn btn-default btn-lg" href="{% url 'journey_create' %}" role="button">Statistics and logs</a>
+    </p>
+  </div>
+</div>
+
 <div class="container">
-  <p>
-    This is your dasboard {{current_user.email}}
-  </p>
 
-<div class="row">
+  <div class="row">
 
-<h2>Your profile</h2>
-<p>
-  <a href="{% url 'journey_create' %}">Create a new Journey</a>
-</p>
+    <div class="col-md-7">
+      <div class="panel panel-default">
+        <div class="panel-body">
 
-</div>
+          {% for journey in journeys %}
 
-<div class="row">
+          {% if forloop.first %}
+          <h3><i class="fa fa-compass" aria-hidden="true"></i>&nbsp;Your last journeys</h3>
+          <hr/>
+          {% endif %}
 
-<h2>Your journeys</h2>
+          <div class="panel panel-default">
+            <div class="panel-body">
 
-{% for journey in journeys %}
-<div class="panel panel-default">
-  <div class="panel-body">
+              <div class="col-md-9 col-sm-9">
+                <h3 style="margin-top: 0;">{{journey.name}}</h3>
+                <p>
+                  <span class="label label-default">Steps : {{ journey.step_set.count }}</span>
+                  <span class="label label-default">Subscribers : {{ journey.inscription_set.count }}</span>
+                  <span class="label label-default">Scans : {{ journey.inscription_set.count }}</span>
+                  <span class="label label-default">Finish : {{ journey.inscription_set.count }}</span>
+                </p>
+              </div>
 
-    <div class="col-md-12">
-      <div class="col-md-2 col-sm-3">
-        <img src="{{ journey.img_description.url }}" class="img img-responsive img-rounded">
+              <div class="col-md-3">
+                <div class="btn-group pull-right">
+                  <button type="button" class="btn btn-default">Actions</button>
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a href="{% url 'journey_detail' journey.slug %}">Overview</a></li>
+                    <li><a href="{% url 'journey_update' journey.slug %}">Edit Journey infos</a></li>
+                    <li><a href="{% url 'create_journey_steps' journey.slug %}">Edit steps</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="{% url 'journey_delete' journey.slug %}">Delete</a></li>
+                  </ul>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          {% empty %}
+
+          <div class="col-md-4">
+            <div class="panel panel-default">
+              <div class="panel-body text-center">
+
+                <i class="fa fa-plus-square" aria-hidden="true" style="font-size: 8em;"></i>
+                <h3>It's time to start !</h3>
+                <p>
+                  You do not have any journey yet. Let's go and create your first adventure !
+                </p>
+                <p>
+                  <a class="btn btn-default btn-lg" href="{% url 'journey_create' %}" role="button">Create your first journey</a>
+                </p>
+
+              </div>
+            </div>
+          </div>
+
+          {% endfor %}
+        </div>
       </div>
-
-      <div class="col-md-10 col-sm-9">
-        <h2>{{ journey.name }}</h2>
-        <p>{{ journey.description }}</p>
-        <p>Steps : {{ journey.step_set.count }} | Subscribers : {{ journey.inscription_set.count }}</p>
-      </div>
-
     </div>
+
+    <div class="col-md-5">
+
+      <div class="panel panel-default">
+        <div class="panel-body">
+
+          <h3><i class="fa fa-area-chart" aria-hidden="true"></i>&nbsp;Quick stats</h3>
+          <hr/>
+          <p>Some cool circles would look nice here.</p>
+
+        </div>
+      </div>
+    </div>
+
   </div>
-  <div class="panel-footer">
-    <a href="{% url 'step_create' %}">Add step</a>
-    <a href="{% url 'journey_update' journey.slug %}">Edit</a>
-    <a href="{% url 'journey_delete' journey.slug %}">Delete</a>
-  </div>
-</div>
-{% empty %}
-    <p>Your journey list is empty.</p>
-    <p>Create the first one now !</p>
-{% endfor %}
 
 
-</div>
+
+
 
 </div>
 

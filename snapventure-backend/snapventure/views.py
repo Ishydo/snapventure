@@ -4,9 +4,12 @@ from .models import Profile, Journey, Inscription, Type, Step, Scan, Edge, State
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 
-from django.urls import reverse_lazy
+from django.core.urlresolvers import reverse_lazy
 
-from .forms import ProfileForm, JourneyForm, InscriptionForm, TypeForm, StepForm, ScanForm
+from .forms import ProfileForm, JourneyForm, InscriptionForm, TypeForm, StepForm, ScanForm, StepFormSet
+
+from django.forms import modelformset_factory
+from django.db import IntegrityError, transaction
 
 # For standard views
 from django.http import HttpResponse
@@ -18,6 +21,7 @@ from django.utils import timezone
 
 import qrcode
 import base64
+import os
 
 
 class Home(TemplateView):
@@ -45,9 +49,15 @@ class JourneyCreateView(CreateView):
     model = Journey
     form_class = JourneyForm
 
-    # Valeurs initiales du formulaire de creation d'une journey
-    def get_initial(self):
-        return {'creator': self.request.user.profile}
+    # def post avec le renvoi des erreurs ?
+    # http://kevindias.com/writing/django-class-based-views-multiple-inline-formsets/
+
+    def form_valid(self, journey_form):
+        self.object = journey_form.save(commit=False) # Used by the success_url
+        new_journey = journey_form.save(commit=False) # Uncommitted to add creator
+        new_journey.creator = self.request.user.profile # Add creator (request user)
+        new_journey.save() # Final save
+        return HttpResponseRedirect(self.get_success_url()) # Success url redirect
 
     # Redirection sur la pge de creation des steps
     def get_success_url(self):
@@ -84,6 +94,53 @@ class StepFirstCreateView(CreateView):
     model = Step
     form_class = StepForm
 
+    def get(self, request, *args, **kwargs):
+
+        j = Journey.objects.get(slug=self.kwargs['slug']) # The initial value for journey
+        t = Type.objects.get(name="Rich Text") # Initial value for content type in first version
+
+        self.object = None
+        step_form = StepFormSet(queryset=Step.objects.filter(journey=j), initial=[{'journey':j, 'content_type': t}])
+        return self.render_to_response(self.get_context_data(step_form=step_form))
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        step_form = StepFormSet(self.request.POST)
+
+        if(step_form.is_valid()):
+
+            j = Journey.objects.get(slug=self.kwargs['slug']) # The journey associated
+            new_steps = []
+
+            for form in step_form:
+                step = form.save(commit=False)
+                step.journey = j
+                step.content_type = Type.objects.get(name="Rich Text") # Default type for v1
+                print("One uuid step is " + str(step.qrcode_uuid))
+                self.create_qrcode(str(step.qrcode_uuid))
+                new_steps.append(step)
+                #step.save()
+            try:
+                with transaction.atomic():
+                    Step.objects.filter(journey=j).delete()
+                    Step.objects.bulk_create(new_steps)
+                    return HttpResponse("Created ok ATOMIC")
+            except IntegrityError:
+                return HttpResponse("Integrity error")
+        else:
+            return HttpResponse("nope")
+
+    def create_qrcode(self, uuid):
+
+        if not os.path.exists("qrcodes/" + uuid + ".jpg"):
+            print("QRCODE CREATED")
+            qr = qrcode.QRCode(version=5, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=30)
+            qr.add_data("http://localhost:8000/scan/" + uuid)
+            qr.make()
+
+            img = qr.make_image()
+            img.save("qrcodes/" + uuid + ".jpg", "JPEG")
+
     def get_initial(self):
         j = Journey.objects.get(slug=self.kwargs['slug'])
         return {'journey': j}
@@ -91,6 +148,10 @@ class StepFirstCreateView(CreateView):
 class StepCreateView(CreateView):
     model = Step
     form_class = StepForm
+
+    def get_initial(self):
+        j = Journey.objects.get(slug=self.kwargs['slug'])
+        return {'journey': j}
 
 class StepDetailView(DetailView):
     model = Step
