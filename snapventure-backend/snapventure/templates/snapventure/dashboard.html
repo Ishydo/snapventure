@@ -25,11 +25,11 @@
   <div class="panel-body">
 
     <div class="col-md-12">
-      <div class="col-md-2">
+      <div class="col-md-2 col-sm-3">
         <img src="{{ journey.img_description.url }}" class="img img-responsive img-rounded">
       </div>
 
-      <div class="col-md-10">
+      <div class="col-md-10 col-sm-9">
         <h2>{{ journey.name }}</h2>
         <p>{{ journey.description }}</p>
         <p>Steps : {{ journey.step_set.count }} | Subscribers : {{ journey.inscription_set.count }}</p>
@@ -44,13 +44,15 @@
   </div>
 </div>
 {% empty %}
-    <li>Your journey list is empty.</li>
+    <p>Your journey list is empty.</p>
+    <p>Create the first one now !</p>
 {% endfor %}
 
 
 </div>
 
 </div>
+
 
 
 {% endblock %}

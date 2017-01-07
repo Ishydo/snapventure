@@ -35,6 +35,7 @@ class StepForm(forms.ModelForm):
     class Meta:
         model = Step
         fields = ['name', 'content_text', 'content_url', 'final', 'content_type', 'journey']
+        widgets = {'journey': forms.HiddenInput()}
 
 
 class ScanForm(forms.ModelForm):

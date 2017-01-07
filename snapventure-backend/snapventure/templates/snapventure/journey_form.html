@@ -1,78 +1,171 @@
 {% extends 'snapventure/base.html' %}
+
 {% load add_css %}
-{% block content %}
+{% load static %}
 
 
-<div class="container">
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datetimepicker.min.css' %}">
+{% endblock %}
 
-<form action="" method="post" enctype="multipart/form-data">
-  {% csrf_token %}
+{% block js %}
+<script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
 
-  {% if form.subject.errors %}
-      <ol>
-      {% for error in form.subject.errors %}
-          <li><strong>{{ error|escape }}</strong></li>
-      {% endfor %}
-      </ol>
-  {% endif %}
-
-  <div class="form-group">
-    {{ form.name.errors }}
-    <label for="{{ form.name.id_for_label }}">Name</label>
-    {{ form.name|addclass:"form-control" }}
-  </div>
-
-  <div class="form-group">
-    {{ form.description.errors }}
-    <label for="{{ form.description.id_for_label }}">Description</label>
-    {{ form.description|addclass:"form-control" }}
-  </div>
-
-  <div class="form-group">
-    {{ form.img_description.errors }}
-    <label for="{{ form.img_description.id_for_label }}">Image de description</label>
-    {{ form.img_description }}
-  </div>
-
-  <div class="form-group">
-    {{ form.img_ambiance.errors }}
-    <label for="{{ form.img_ambiance.id_for_label }}">Image d'ambiance</label>
-    {{ form.img_ambiance }}
-  </div>
-
-  <div class="form-group">
-    {{ form.start_time.errors }}
-    <label for="{{ form.start_time.id_for_label }}">Start time</label>
-    {{ form.start_time|addclass:"form-control"  }}
-  </div>
-
-  <div class="form-group">
-    {{ form.end_time.errors }}
-    <label for="{{ form.end_time.id_for_label }}">End time</label>
-    {{ form.end_time|addclass:"form-control"  }}
-  </div>
-
-  <div class="form-group">
-    {{ form.active.errors }}
-    <label for="{{ form.active.id_for_label }}">Active</label>
-    {{ form.active  }}
-  </div>
-
-  <div class="form-group">
-    {{ form.private.errors }}
-    <label for="{{ form.private.id_for_label }}">Private</label>
-    {{ form.private  }}
-  </div>
-
-  {{ form.creator  }}
-    {{ form.creator  }}
-
-    <input type="submit" value="Save" />
-
-
-
-</form>
-
-</div>
 
 {% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+  <div class="col-md-9">
+
+
+    <div class="panel panel-default">
+
+      <div class="panel-body">
+
+        <form action="" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          {% if form.subject.errors %}
+          <ol>
+            {% for error in form.subject.errors %}
+            <li><strong>{{ error|escape }}</strong></li>
+            {% endfor %}
+          </ol>
+          {% endif %}
+
+
+          <div class="row">
+            <div class="container-fluid">
+              <div class="form-group">
+                {{ form.name.errors }}
+                <label for="{{ form.name.id_for_label }}">Name</label>
+                {{ form.name|addclass:"form-control" }}
+                <p class="help-block">The name of your great journey.</p>
+              </div>
+
+              <div class="form-group">
+                {{ form.description.errors }}
+                <label for="{{ form.description.id_for_label }}">Description</label>
+                {{ form.description|addclass:"form-control" }}
+                <p class="help-block">A description of the context or the goal.</p>
+              </div>
+            </div>
+          </div>
+
+          <hr/>
+
+          <div class="row">
+            <div class="container-fluid">
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  {{ form.img_description.errors }}
+                  <label for="{{ form.img_description.id_for_label }}">Description image</label>
+                  {{ form.img_description }}
+                  <p class="help-block">This image directly represents your journey. It's its profile picture.</p>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  {{ form.img_ambiance.errors }}
+                  <label for="{{ form.img_ambiance.id_for_label }}">Ambiance image</label>
+                  {{ form.img_ambiance }}
+                  <p class="help-block">Displayed as a banner to show the ambiance of your journey.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr/>
+
+          <div class="row">
+            <div class="container-fluid">
+              <div class="col-md-6">
+                <div class="form-group">
+                  {{ form.start_time.errors }}
+                  <label for="{{ form.start_time.id_for_label }}">Start time</label>
+                  {{ form.start_time|addclass:"form-control datetimepicker"  }}
+                  <p class="help-block">From what time is this journey available ?</p>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  {{ form.end_time.errors }}
+                  <label for="{{ form.end_time.id_for_label }}">End time</label>
+                  {{ form.end_time|addclass:"form-control datetimepicker"  }}
+                  <p class="help-block">Until when is this journey available ?</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <hr/>
+
+          <div class="row">
+            <div class="container-fluid">
+
+              <div class="col-md-6">
+
+                <div class="form-group">
+                  {{ form.active.errors }}
+                  <label for="{{ form.active.id_for_label }}">Active</label>
+                  {{ form.active  }}
+                  <p class="help-block">Is this journey accessible for people ?</p>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  {{ form.private.errors }}
+                  <label for="{{ form.private.id_for_label }}">Private</label>
+                  {{ form.private  }}
+                  <p class="help-block">Is this journey accessible only for people who know it ?</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {{ form.creator  }}
+          {{ form.creator  }}
+
+          <hr/>
+          <input type="submit" class="btn btn-default" value="Save this journey" />
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+
+    <div class="panel panel-default">
+      <div class="panel-body text-justify">
+        <h2>What is it ?</h2>
+        <p>
+          A journey contains a set of steps represented by qrcodes.
+          You can here start creating your journey by defining its
+          main informations and properties such as descriptions or
+          images.
+        </p>
+        <p>
+          In the next step, you will provide the informations about
+          the steps of your journey.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+  $(".datetimepicker").datetimepicker();
+  </script>
+
+
+  {% endblock %}
