@@ -18,7 +18,7 @@
     <div class="container">
 
       <div class="col-md-12">
-        <h1>{{ object.name }}</h1>
+        <h1>ok</h1>
       </div>
 
     </div>
@@ -27,10 +27,24 @@
 <br/>
 <div class="container">
 
-  <div class="col-md-9" style="font-size: 15pt; text-align:justify;">
-    {{ object.description|safe }}
+  <div class="col-md-9">
+
+    <a href="{% url 'add_journey_step' journey.slug %}" class="btn btn-default">Add new step</a>
 
     <hr/>
+
+    <h2>Steps of this journey</h2>
+    {% for step in steps %}
+
+    <div class="panel panel-default">
+      <div class="panel-body">
+        {{ step.name }}
+        <a href="{% url 'step_update' step.slug %}">Edit step</a>
+        <a href="{% url 'step_delete' step.slug %}">Delete</a>
+      </div>
+    </div>
+
+    {% endfor %}
 
     <h2>Map journey overview</h2>
 
@@ -38,33 +52,10 @@
 
 
 
-    <h2>Steps of this journey</h2>
-    {% for step in object.step_set.all|dictsort:"order_id" %}
-
-    <div class="panel panel-default">
-      <div class="panel-body">
-        {{ step.name }}
-        <a href="{% url 'step_update' step.slug %}">Edit step</a>
-      </div>
-    </div>
-
-    {% endfor %}
 
   </div>
 
   <div class="col-md-3">
-
-    <p>Other informations</p>
-
-    Creation : {{ object.created }}<br/>
-    Updated : {{ object.last_updated }}<br/>
-    Start time: {{ object.start_time }}<br/>
-    End time:{{ object.end_time }}<br/>
-    Private :{{ object.private }}<br/>
-    Active: {{ object.active }}<br/>
-
-    <a class="btn btn-default" href="{% url 'journey_list' %}">Journey Listing</a>
-    <a class="btn btn-primary" href="{{object.get_update_url}}">Edit Journey</a>
 
 
   </div>
@@ -90,7 +81,7 @@ function initialize() {
 
 
   var flightPlanCoordinates = [
-    {% for step in object.step_set.all|dictsort:"order_id" %}
+    {% for step in steps %}
     {lat: {{step.position.latitude}}, lng: {{step.position.longitude}}},
     {% endfor %}
   ];
@@ -105,7 +96,7 @@ function initialize() {
 
   flightPath.setMap(map);
 
-  {% for step in object.step_set.all|dictsort:"order_id" %}
+  {% for step in steps %}
   addMarker({{ step.position.latitude }}, {{ step.position.longitude }}, "{{ step.name }}", "{{ step.order_id }}");
   {% endfor %}
   map.fitBounds(bounds);

@@ -18,6 +18,7 @@ from django.template import loader
 from django.shortcuts import render
 
 from django.utils import timezone
+from django.utils.text import slugify
 
 import qrcode
 import base64
@@ -176,8 +177,9 @@ class StepCreateView(CreateView):
 
         self.object = step_form.save(commit=False) # Used by the success_url
         new_step = step_form.save(commit=False)
-        new_step.journey = j
-        new_step.content_type = t
+        new_step.journey = j # The associated journey
+        new_step.content_type = t # Default content type for snapventure v1
+        new_step.slug = slugify(new_step.name) # Create slug
 
         # Order ID
         if Step.objects.filter(journey=j).count() == 0:
@@ -196,8 +198,13 @@ class StepCreateView(CreateView):
             return HttpResponseRedirect("/dashboard/") # Success url redirect
 
 
+class StepManageView(TemplateView):
+    template_name = "snapventure/steps_manage.html"
 
-
+    def get(self, request, *args, **kwargs):
+        j = Journey.objects.get(slug=self.kwargs['slug'])
+        steps = Step.objects.filter(journey=j).order_by("order_id")
+        return render(request, self.template_name, {'journey': j, 'steps': steps})
 
 
 class StepDetailView(DetailView):
@@ -213,12 +220,9 @@ class StepUpdateView(UpdateView):
     form_class = StepForm
 
 
-
-
-
-
-
-
+class StepDeleteView(DeleteView):
+    model = Step
+    success_url = reverse_lazy('dashboard')
 
 
 class Logout(TemplateView):

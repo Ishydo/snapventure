@@ -52,9 +52,8 @@
                   </button>
                   <ul class="dropdown-menu">
                     <li><a href="{% url 'journey_detail' journey.slug %}">Overview</a></li>
-                    <li><a href="{% url 'journey_update' journey.slug %}">Edit Journey infos</a></li>
-                    <li><a href="{% url 'add_journey_step' journey.slug %}">Add Step</a></li>
-                    <li><a href="{% url 'create_journey_steps' journey.slug %}">Edit + Add steps (old)</a></li>
+                    <li><a href="{% url 'journey_update' journey.slug %}">Edit Journey</a></li>
+                    <li><a href="{% url 'manage_steps' journey.slug %}">Manage Steps</a></li>
                     <li role="separator" class="divider"></li>
                     <li><a href="{% url 'journey_delete' journey.slug %}">Delete</a></li>
                   </ul>
