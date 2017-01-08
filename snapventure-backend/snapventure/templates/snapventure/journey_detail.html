@@ -2,6 +2,14 @@
 
 {% load static %}
 
+{% block styles %}
+<style>
+#map-canvas {
+  height: 600px;
+}
+</style>
+{% endblock %}
+
 {% block content %}
 
 
@@ -24,13 +32,21 @@
 
     <hr/>
 
+    <h2>Map overview</h2>
+
+    <p>Map here yeah</p>
+    <div id="map-canvas"></div>
+
+
+
     <h2>Steps of this journey</h2>
-    {% for step in object.step_set.all %}
+    {% for step in object.step_set.all|dictsort:"order_id" %}
 
     <div class="panel panel-default">
       <div class="panel-body">
-      {{ step.name }}
-    </div>
+        {{ step.name }}
+        <a href="{% url 'step_update' step.slug %}">Edit step</a>
+      </div>
     </div>
 
     {% endfor %}
@@ -55,6 +71,48 @@
   </div>
 </div>
 
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3&sensor=false&key=AIzaSyAj6kuXFBzL_NCXe3LVrAcvbM3Tk93Nimk"></script>
+<script>
+function initialize() {
+  var map = new google.maps.Map(document.getElementById('map-canvas'));
+  var bounds = new google.maps.LatLngBounds();
+  function addMarker(lat, lng, title, lab) {
+    var position = new google.maps.LatLng(lat, lng);
+    var marker = new google.maps.Marker({
+      position: position,
+      map: map,
+      clickable: true,
+      title: title,
+      label: lab
+    });
+    bounds.extend(position);
+  }
+
+
+  var flightPlanCoordinates = [
+    {% for step in object.step_set.all|dictsort:"order_id" %}
+    {lat: {{step.position.latitude}}, lng: {{step.position.longitude}}},
+    {% endfor %}
+  ];
+
+  var flightPath = new google.maps.Polyline({
+    path: flightPlanCoordinates,
+    geodesic: true,
+    strokeColor: '#FF0000',
+    strokeOpacity: 1.0,
+    strokeWeight: 2
+  });
+
+  flightPath.setMap(map);
+
+  {% for step in object.step_set.all|dictsort:"order_id" %}
+  addMarker({{ step.position.latitude }}, {{ step.position.longitude }}, "{{ step.name }}", "{{ step.order_id }}");
+  {% endfor %}
+  map.fitBounds(bounds);
+}
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
 
 
 {% endblock %}

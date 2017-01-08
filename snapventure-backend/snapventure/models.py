@@ -81,7 +81,6 @@ class Journey(models.Model):
         if not self.id:
             # Newly created object, so set slug
             self.slug = slugify(self.name)
-
         super(Journey, self).save(*args, **kwargs)
 
 class Inscription(models.Model):
@@ -123,7 +122,7 @@ class Step(models.Model):
     content_text = models.TextField()
     content_url = models.URLField(blank=True)
     content_type = models.ForeignKey(Type)
-    #order_id = models.IntegerField()
+    order_id = models.IntegerField()
     journey = models.ForeignKey(Journey)
     qrcode_uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     root = models.BooleanField(default=False)
@@ -147,7 +146,11 @@ class Step(models.Model):
     def get_update_url(self):
         return reverse('step_update', args=(self.slug,))
 
-    prepopulated_fields = {"slug": ("name",)}
+    def save(self, *args, **kwargs):
+        if not self.qrcode_uuid:
+            # Newly created object, so set slug
+            self.slug = slugify(self.name)
+        super(Step, self).save(*args, **kwargs)
 
 
 class Edge(models.Model):

@@ -61,7 +61,7 @@ class JourneyCreateView(CreateView):
 
     # Redirection sur la pge de creation des steps
     def get_success_url(self):
-        return reverse_lazy('create_journey_steps', kwargs={'slug': self.object.slug})
+        return reverse_lazy('add_journey_step', kwargs={'slug': self.object.slug})
 
 
 class JourneyDetailView(DetailView):
@@ -148,10 +148,57 @@ class StepFirstCreateView(CreateView):
 class StepCreateView(CreateView):
     model = Step
     form_class = StepForm
+    add_another = False
 
-    def get_initial(self):
+    def get(self, request, *args, **kwargs):
+        self.object = None
         j = Journey.objects.get(slug=self.kwargs['slug'])
-        return {'journey': j}
+        steps = Step.objects.filter(journey=j).order_by('order_id')
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        return self.render_to_response(self.get_context_data(form=form, steps=steps))
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        if (form.is_valid()):
+            if "save_and_add_another" in request.POST:
+                self.add_another = True
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, step_form):
+
+        j = Journey.objects.get(slug=self.kwargs['slug'])
+        t = Type.objects.get(name="Rich Text")
+
+        self.object = step_form.save(commit=False) # Used by the success_url
+        new_step = step_form.save(commit=False)
+        new_step.journey = j
+        new_step.content_type = t
+
+        # Order ID
+        if Step.objects.filter(journey=j).count() == 0:
+            print("It's the first step of this journey")
+            new_step.root = True
+            new_step.order_id = 1
+        else:
+            print("It's not the first step")
+            new_step.order_id = Step.objects.filter(journey=j).count() + 1
+
+        new_step.save() # Final save
+
+        if self.add_another:
+            return HttpResponseRedirect("") # Success url redirect
+        else:
+            return HttpResponseRedirect("/dashboard/") # Success url redirect
+
+
+
+
+
 
 class StepDetailView(DetailView):
     model = Step
