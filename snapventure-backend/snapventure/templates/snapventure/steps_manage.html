@@ -18,7 +18,7 @@
     <div class="container">
 
       <div class="col-md-12">
-        <h1>ok</h1>
+        <h1>{{journey.name}}</h1>
       </div>
 
     </div>
@@ -39,8 +39,10 @@
     <div class="panel panel-default">
       <div class="panel-body">
         {{ step.name }}
-        <a href="{% url 'step_update' step.slug %}">Edit step</a>
+        <span class="pull-right">
+        <a href="{% url 'step_update' step.slug %}">Edit</a>
         <a href="{% url 'step_delete' step.slug %}">Delete</a>
+      </span>
       </div>
     </div>
 
