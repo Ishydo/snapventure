@@ -1,7 +1,10 @@
 {% extends 'snapventure/base.html' %}
 
+
+
 {% load static %}
 {% load add_css %}
+
 
 {% block js %}
 <script src="{% static 'js/jquery.formset.js' %}"></script>
@@ -18,12 +21,14 @@
 
     {{ step_form.management_form }}
     {{ step_form.non_form_errors }}
+    {{ step_form.media }}
 
     {% for form in step_form %}
 
     <div class="panel panel-default step-formset">
       <div class="panel-body">
         {{form.id}}
+
 
         {% if form.subject.errors %}
         <ol>
@@ -50,18 +55,24 @@
               <p class="help-block">The name of this step.</p>
             </div>
 
-            <button class="btn btn-default collapse-button" type="button" id="collapse-step-{{forloop.counter0}}-button">
+            <!--<button class="btn btn-default collapse-button" type="button" id="collapse-step-{{forloop.counter0}}-button">
               Add informations
             </button>
             <div class="collapse" id="collapse-step-{{forloop.counter0}}">
-              <br/>
+              <br/> -->
               <div class="form-group">
                 {{ form.content_text.errors }}
                 <label for="{{ form.content_text.id_for_label }}">Step content</label>
                 {{ form.content_text|addclass:"form-control" }}
                 <p class="help-block">A description of the context or the goal.</p>
               </div>
+              <div class="form-group">
+                {{ form.position }}
+                <p class="help-block">A description of the context or the goal.</p>
+              </div>
+<!--
             </div>
+          -->
 
 
           </div>

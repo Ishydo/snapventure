@@ -9,7 +9,7 @@ from django.dispatch import receiver
 
 from django.core.urlresolvers import reverse
 from django.utils.text import slugify
-
+from geoposition.fields import GeopositionField
 from django.conf import settings
 from rest_framework.authtoken.models import Token
 
@@ -119,6 +119,7 @@ class Step(models.Model):
     slug = models.SlugField()
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
+    position = GeopositionField(blank=True, null=True)
     content_text = models.TextField()
     content_url = models.URLField(blank=True)
     content_type = models.ForeignKey(Type)

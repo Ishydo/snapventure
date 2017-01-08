@@ -37,10 +37,10 @@ class TypeForm(forms.ModelForm):
 class StepForm(forms.ModelForm):
     class Meta:
         model = Step
-        fields = ['name', 'content_text', 'content_url', 'final', 'content_type', 'journey']
+        fields = ['name', 'content_text', 'content_url', 'final', 'content_type', 'journey', 'position']
         #widgets = {'journey': forms.HiddenInput(), 'content_type': forms.HiddenInput()}
 
-StepFormSet = modelformset_factory(Step, fields=['name', 'content_text'])
+StepFormSet = modelformset_factory(Step, fields=['name', 'content_text', 'position'])
 
 class ScanForm(forms.ModelForm):
     class Meta:

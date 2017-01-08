@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 INSTALLED_APPS = [
     'snapventure',
+    'geoposition',
     'rest_framework',
     'rest_framework.authtoken',
     'django.contrib.admin',
@@ -136,3 +137,5 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+GEOPOSITION_GOOGLE_MAPS_API_KEY = 'AIzaSyAj6kuXFBzL_NCXe3LVrAcvbM3Tk93Nimk'
