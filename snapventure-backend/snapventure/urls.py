@@ -41,8 +41,6 @@ urlpatterns = [
     url(r'^dashboard/step/update/(?P<slug>\S+)/$', views.StepUpdateView.as_view(), name='step_update'),
     url(r'^dashboard/step/delete/(?P<slug>\S+)/$', views.StepDeleteView.as_view(), name='step_delete'),
 
-    #url(r'^dashboard/(?P<slug>\S+)/create-step/$', views.StepFirstCreateView.as_view(), name='create_journey_steps'),
-
     url(r'^dashboard/(?P<slug>\S+)/new-step/$', views.StepCreateView.as_view(), name='add_journey_step'),
     url(r'^dashboard/(?P<slug>\S+)/manage-steps/$', views.StepManageView.as_view(), name='manage_steps'),
 
@@ -50,10 +48,3 @@ urlpatterns = [
     url(r'^dashboard', views.Dashboard.as_view(), name="dashboard"),        # User Dashboard
     url(r'^', views.Home.as_view(), name="homepage"),                       # Default homepage
 ]
-
-
-# Testing / Debug URLs
-#urlpatterns += (
-    #url(r'^$', views.Index.as_view(), name='index'),
-#    url(r'^scan/(?P<uid>\S+)', views.Scanner.as_view(), name='scan'),
-#)

@@ -6,10 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <!-- <link rel="icon" href="../../favicon.ico">-->
+  <meta name="description" content="A simple journey creator with wrcodes as nodes.">
+  <meta name="author" content="Dominique Ducommun @domdompow INF3dlm-a">
 
   <title>Snapventure</title>
 
@@ -74,42 +72,15 @@
           <li><a href="{% url 'login' %}">Login</a></li>
           <li><a href="#">Register</a></li>
           {% endif %}
+          
+        </ul>
 
-          <!--
-          <li class="dropdown">
+      </div>
+    </div>
+  </nav>
 
-
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-          <i class="fa fa-user"></i>&nbsp; domdompow <span class="caret"></span> <span class="badge" style="background:#c0392b;color:white;">0</span>
-        </a>
-        <ul class="dropdown-menu" role="menu">
-        <li><a href="http://whatching.srvz-webapp.he-arc.ch/user/3"><i class="fa fa-th-large"></i>&nbsp; Dashboard</a></li>
-        <li><a href="/suggestions"><i class="fa fa-thumbs-up"></i>&nbsp; My suggestions <span class="badge" style="background:#c0392b;color:white;">0</span></a></li>
-        <li><a href="/suggestions#watchlist"><i class="fa fa-th-list"></i>&nbsp; My watchlist</a></li>
-        <li>
-
-        <a href="http://whatching.srvz-webapp.he-arc.ch/logout"
-        onclick="event.preventDefault();
-        document.getElementById('logout-form').submit();">
-        <i class="fa fa-times"></i>&nbsp; Logout
-      </a>
-
-      <form id="logout-form" action="http://whatching.srvz-webapp.he-arc.ch/logout" method="POST" style="display: none;">
-      <input type="hidden" name="_token" value="mzre17UmMIZBmtYvk5YZRMiBElEXwyjTcVPr24y9">
-    </form>
-  </li>
-</ul>
-</li>
--->
-
-</ul>
-
-</div>
-</div>
-</nav>
-
-{% block content %}
-{% endblock %}
+  {% block content %}
+  {% endblock %}
 
 </body>
 </html>
