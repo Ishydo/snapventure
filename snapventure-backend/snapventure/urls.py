@@ -1,6 +1,7 @@
 from django.conf.urls import url
 
-from . import views
+from .views import *
+
 from rest_framework.authtoken import views as rviews
 from django.conf.urls import url, include
 from rest_framework import routers
@@ -26,6 +27,7 @@ urlpatterns = [
     # Registration related routes
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$', views.Logout.as_view(), name='logout'),
+
 
     # Journey Useradmin Dashboard related routes
     url(r'^dashboard/journey/$', views.JourneyListView.as_view(), name='journey_list'),
