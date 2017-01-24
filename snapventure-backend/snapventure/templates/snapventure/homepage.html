@@ -1,24 +1,26 @@
 {% extends 'snapventure/base.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/homepage.css' %}">
+{% endblock %}
 
 {% block content %}
 
-<div class="container">
 
-  <h1>Snapventure homepage</h1>
+<div class="container-fluid fullpage-image">
 
-  <p>
-    This is the homepage of snapventure.
-  </p>
+  <div class="container adjusted">
+    <div class="col-md-8">
+      <h1 class="homepage-title">A journey starts here.</h1>
+      <p class="homepage-lead">
+        Snapventure is a platform which allows you to create journeys with qrcodes as nodes.
+        A nice plus for your events, treasure hunts or educational journeys.
+      </p>
+      <a href="/accounts/register/" class="btn btn-default btn-danger btn-lg">Join the adventure</a>
+    </div>
 
-
-  <h2>Possible actions</h2>
-
-  <p>
-    <a href="{% url 'login' %}">Login</a>
-    <a href="{% url 'login' %}">Register</a>
-  </p>
-
+  </div>
 </div>
-
 
 {% endblock %}
