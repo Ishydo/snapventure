@@ -1,5 +1,3 @@
-from django.conf.urls import url
-
 from .views import *
 
 from rest_framework.authtoken import views as rviews
@@ -25,6 +23,8 @@ urlpatterns = [
     url(r'^api-token-auth/', rviews.obtain_auth_token),
 
     # Registration related routes
+    #url(r'^register/$', views.Register.as_view(), name='register'),
+    url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$', views.Logout.as_view(), name='logout'),
 

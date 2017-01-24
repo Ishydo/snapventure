@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.forms import modelformset_factory
 from tinymce.widgets import TinyMCE
 
+
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
