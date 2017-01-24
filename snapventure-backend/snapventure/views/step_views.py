@@ -9,6 +9,10 @@ from django.utils import timezone
 from django.shortcuts import render
 
 
+import qrcode
+import base64
+import os
+
 # Creation flow step add steps
 class StepFirstCreateView(CreateView):
     model = Step
@@ -50,20 +54,7 @@ class StepFirstCreateView(CreateView):
         else:
             return HttpResponse("nope")
 
-    def create_qrcode(self, uuid):
 
-        if not os.path.exists("qrcodes/" + uuid + ".jpg"):
-            print("QRCODE CREATED")
-            qr = qrcode.QRCode(version=5, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=30)
-            qr.add_data("http://localhost:8000/scan/" + uuid)
-            qr.make()
-
-            img = qr.make_image()
-            img.save("qrcodes/" + uuid + ".jpg", "JPEG")
-
-    def get_initial(self):
-        j = Journey.objects.get(slug=self.kwargs['slug'])
-        return {'journey': j}
 
 class StepCreateView(CreateView):
     model = Step
@@ -108,7 +99,7 @@ class StepCreateView(CreateView):
         else:
             print("It's not the first step")
             new_step.order_id = Step.objects.filter(journey=j).count() + 1
-
+        self.create_qrcode(str(new_step.qrcode_uuid)) # Create the qrcode image and save it
         new_step.save() # Final save
 
         if self.add_another:
@@ -116,6 +107,16 @@ class StepCreateView(CreateView):
         else:
             return HttpResponseRedirect("/dashboard/") # Success url redirect
 
+
+    def create_qrcode(self, uuid):
+        if not os.path.exists("qrcodes/" + uuid + ".jpg"):
+            print("QRCODE CREATED")
+            qr = qrcode.QRCode(version=5, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=30)
+            qr.add_data("http://localhost:8000/scan/" + uuid)
+            qr.make()
+
+            img = qr.make_image()
+            img.save("qrcodes/" + uuid + ".jpg", "JPEG")
 
 class StepManageView(TemplateView):
     template_name = "snapventure/steps_manage.html"
