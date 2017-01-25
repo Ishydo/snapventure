@@ -7,96 +7,120 @@
 <script src='//cdn.tinymce.com/4/tinymce.min.js'></script>
 {% endblock %}
 
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/step-form.css' %}">
+
+{% endblock %}
+
 {% block content %}
 
-<div class="container">
+<form action="" method="post"  enctype="multipart/form-data" id="steps-form" novalidate="">
+  {% csrf_token %}
 
-  {% if steps.count > 0 %}
-  <div class="col-md-12 text-center">
+  {{ form.management_form }}
+  {{ form.non_form_errors }}
+  {{ form.media }}
 
-    {% for step in steps %}
-
-    {% if forloop.first %}
-    <span class="">
-      <span class="label label-success" style="font-size:.8em">{{ forloop.counter }}</span>
-    </span>
-    {% elif forloop.last %}
-    <span class="">
-      <span class="label label-default" style="font-size:.8em">{{ forloop.counter }}</span>
-    </span>
-    {% else %}
-    <span class="">
-      <span class="label label-danger" style="font-size:.8em">{{ forloop.counter }}</span>
-    </span>
-    {% endif %}
-
-    {% endfor %}
-    <hr/>
-  </div>
-  {% else %}
-  <div class="col-md-12">
-    <h1>It's your first step</h1>
-  </div>
-  {% endif %}
+  <div class="container">
 
 
-</div>
+    <div class="col-md-12">
 
-<div class="container">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="col-md-12">
 
-  <form action="" method="post"  enctype="multipart/form-data" id="steps-form" novalidate="">
-    {% csrf_token %}
+            {% if steps.count > 0 %}
 
-    {{ form.management_form }}
-    {{ form.non_form_errors }}
-    {{ form.media }}
+            <h2>Create New Step</h2>
+            <p class="lead">
+              On this page you can add a new journey. After completing this form, you will be asked
+              to create the related steps of this journey.
+            </p>
 
-    <div class="panel panel-default step-formset">
-      <div class="panel-body">
+            <div class="col-md-12 text-center">
 
-        {% if form.subject.errors %}
-        <ol>
-          {% for error in form.subject.errors %}
-          <li><strong>{{ error|escape }}</strong></li>
-          {% endfor %}
-        </ol>
-        {% endif %}
+              {% for step in steps %}
 
-        <div class="row">
-          <div class="container-fluid">
+              <span class="">
+                  <a class="label label-default step-label" role="button" data-trigger="focus" data-toggle="popover" data-placement="top" title="Step #{{step.order_id}}" tabindex="0" data-content="{{step.name}}" style="font-size:.8em">{{ forloop.counter }}</a>
+              </span>
+
+              {% endfor %}
+
+              <span class="">
+                  <a class="label label-success step-label" role="button" data-trigger="focus" data-toggle="popover" data-placement="top" title="Current Step" tabindex="0" data-content="This is the step you are creating now" style="font-size:.8em">X</a>
+              </span>
+
+              <hr/>
+            </div>
+            {% else %}
+            <h2>Create The First Step</h2>
+            <p class="lead">
+              On this page you can add a new journey. After completing this form, you will be asked
+              to create the related steps of this journey.
+            </p>
+            {% endif %}
+
 
             <div class="form-group">
               {{ form.name.errors }}
-              <!-- <label for="{{ form.name.id_for_label }}">Name</label> -->
               {{ form.name|addclass:"form-control input-lg" }}
-              <p class="help-block">The name of this step.</p>
-            </div>
-
-            <div class="form-group">
-              {{ form.content_text.errors }}
-              <!-- <label for="{{ form.content_text.id_for_label }}">Step content</label> -->
-              {{ form.content_text|addclass:"form-control tinymce" }}
-              <p class="help-block">This content will display when users scan this step.</p>
-            </div>
-            <div class="form-group">
-              {{ form.position }}
-              <p class="help-block">Where is this step ?</p>
             </div>
 
           </div>
         </div>
-
       </div>
+
     </div>
 
-    <input type="submit" value="Save step" name="save" class="btn btn-default" />
-    <input type="submit" value="Save and add another" name="save_and_add_another" class="btn btn-default" />
+  </div>
 
-  </form>
-  <br/>
-</div>
+  <div class="container">
+
+
+    <div class="col-md-12">
+
+
+      <div class="panel panel-default step-formset">
+        <div class="panel-body">
+
+
+          <div class="row">
+            <div class="container-fluid">
+
+
+              <div class="form-group">
+                {{ form.content_text.errors }}
+                <!-- <label for="{{ form.content_text.id_for_label }}">Step content</label> -->
+                {{ form.content_text|addclass:"form-control tinymce" }}
+                <p class="help-block">This content will display when users scan this step.</p>
+              </div>
+              <div class="form-group">
+                {{ form.position }}
+                <p class="help-block">Where is this step ?</p>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <input type="submit" value="Save step" name="save" class="btn btn-default" />
+      <input type="submit" value="Save and add another" name="save_and_add_another" class="btn btn-default" />
+
+
+      <br/>
+    </div>
+  </div>
+</form>
 
 <script>
+
+$(function () {
+  $('[data-toggle="popover"]').popover()
+})
 
 tinymce.init({
   selector: '.tinymce',
