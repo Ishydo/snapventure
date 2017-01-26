@@ -30,14 +30,17 @@ urlpatterns = [
 
 
     # Journey Useradmin Dashboard related routes
-    url(r'^dashboard/journey/$', views.JourneyListView.as_view(), name='journey_list'),
+    url(r'^journeys$', views.JourneyListView.as_view(), name='journey_list'),
+    url(r'^journey/view/(?P<slug>\S+)/$', views.JourneyDetailView.as_view(), name='journey_detail'),
+    url(r'^step/view/(?P<slug>\S+)/$', views.StepDetailView.as_view(), name="step_detail"),
+    url(r'^scan/(?P<qrcode_uuid>\S+)$', views.ScanProcessView.as_view(), name="scan"),
+
     url(r'^dashboard/journey/create', views.JourneyCreateView.as_view(), name="journey_create"),
-    url(r'^dashboard/journey/view/(?P<slug>\S+)/$', views.JourneyDetailView.as_view(), name='journey_detail'),
     url(r'^dashboard/journey/update/(?P<slug>\S+)/$', views.JourneyUpdateView.as_view(), name='journey_update'),
     url(r'^dashboard/journey/delete/(?P<slug>\S+)/$', views.JourneyDeleteView.as_view(), name='journey_delete'),
 
     url(r'^dashboard/step/create', views.StepCreateView.as_view(), name="step_create"),
-    url(r'^dashboard/step/view/(?P<slug>\S+)/$', views.StepDetailView.as_view(), name="step_detail"),
+
     url(r'^dashboard/step/update/(?P<slug>\S+)/$', views.StepUpdateView.as_view(), name='step_update'),
     url(r'^dashboard/step/delete/(?P<slug>\S+)/$', views.StepDeleteView.as_view(), name='step_delete'),
 

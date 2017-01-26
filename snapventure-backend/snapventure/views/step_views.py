@@ -1,13 +1,14 @@
 from django.views.generic import DetailView, ListView, UpdateView, CreateView, TemplateView, DeleteView
-from ..models import Step, Journey, Type
+from ..models import Step, Journey, Type, Scan
 from ..forms import StepForm
 from django.core.urlresolvers import reverse_lazy
 
 from django.utils.text import slugify
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.utils import timezone
 from django.shortcuts import render
 
+from django.utils import timezone
 
 import qrcode
 import base64
@@ -130,10 +131,47 @@ class StepManageView(TemplateView):
 class StepDetailView(DetailView):
     model = Step
 
-    def get_context_data(self, **kwargs):
-        context = super(StepDetailView, self).get_context_data(**kwargs)
-        context['now'] = timezone.now()
-        return context
+    def get(self, request, *args, **kwargs):
+
+        # TEST SUBSCRIPTION
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+
+        if not request.user.is_authenticated(): # USer not logged in
+            return HttpResponse("user not auth")
+        else:
+            if self.object.journey.creator == request.user.profile:
+                return self.render_to_response(context)
+            else:
+                if not self.journey_is_valid(self.object.journey):  # Journey is valid ?
+                    return HttpResponse("journey invalid")
+                else:
+                    if not self.journey_in_time(self.object.journey):   # In time to play ?
+                        return HttpResponse("journey not in time")
+                    else:
+                        if self.step_is_root(self.object):              # First step ?
+                            return self.render_to_response(context)
+                        else:
+                            if not self.user_scanned_previous_step(self.object, request):   # Scanned previous ?
+                                return HttpResponse("no scanned previous!")
+                            else:
+                                return self.render_to_response(context)
+
+
+    def journey_is_valid(self, journey):
+        return journey.active
+
+    def journey_in_time(self, journey):
+        if not journey.end_time:
+            return True
+        else:
+            return journey.start_time <= timezone.now() <= journey.end_time
+
+    def step_is_root(self, step):
+        return step.root
+
+    def user_scanned_previous_step(self, step, request):
+        return Scan.objects.filter(profile=request.user.profile, step=Step.objects.get(journey=step.journey, order_id=step.order_id - 1)).exists()
 
 class StepUpdateView(UpdateView):
     model = Step

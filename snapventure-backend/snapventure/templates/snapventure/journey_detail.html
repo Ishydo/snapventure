@@ -4,6 +4,11 @@
 
 {% block styles %}
 <style>
+
+.navbar{
+  margin-bottom: 0;
+}
+
 #map-canvas {
   height: 600px;
 }
@@ -27,31 +32,23 @@
 <br/>
 <div class="container">
 
-  <div class="col-md-9" style="font-size: 15pt; text-align:justify;">
+  <div class="col-md-12" style="font-size: 15pt; text-align:justify;">
     {{ object.description|safe }}
 
     <hr/>
 
-    <h2>Map journey overview</h2>
+    <div class="list-group">
+      {% for step in object.step_set.all|dictsort:"order_id" %}
+        <a href="{% url 'step_detail' step.slug %}" class="list-group-item">Step #{{step.order_id}} - <b>{{step.name}}</b></a>
+      {% endfor %}
+    </div>
 
     <div id="map-canvas"></div>
 
-
-
-    <h2>Steps of this journey</h2>
-    {% for step in object.step_set.all|dictsort:"order_id" %}
-
-    <div class="panel panel-default">
-      <div class="panel-body">
-        {{ step.name }}
-        <a href="{% url 'step_update' step.slug %}">Edit step</a>
-      </div>
-    </div>
-
-    {% endfor %}
-
   </div>
 
+
+<!--
   <div class="col-md-3">
 
     <p>Other informations</p>
@@ -68,6 +65,7 @@
 
 
   </div>
+-->
 </div>
 
 
@@ -87,23 +85,6 @@ function initialize() {
     });
     bounds.extend(position);
   }
-
-
-  var flightPlanCoordinates = [
-    {% for step in object.step_set.all|dictsort:"order_id" %}
-    {lat: {{step.position.latitude}}, lng: {{step.position.longitude}}},
-    {% endfor %}
-  ];
-
-  var flightPath = new google.maps.Polyline({
-    path: flightPlanCoordinates,
-    geodesic: true,
-    strokeColor: '#FF0000',
-    strokeOpacity: 1.0,
-    strokeWeight: 2
-  });
-
-  flightPath.setMap(map);
 
   {% for step in object.step_set.all|dictsort:"order_id" %}
   addMarker({{ step.position.latitude }}, {{ step.position.longitude }}, "{{ step.name }}", "{{ step.order_id }}");

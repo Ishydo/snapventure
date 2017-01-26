@@ -1,5 +1,5 @@
 from django.views.generic import DetailView, ListView, UpdateView, CreateView, TemplateView, DeleteView
-from ..models import Journey
+from ..models import Journey, Scan, Step
 from ..forms import UserForm, ProfileForm
 
 from django.contrib.auth import logout
@@ -18,6 +18,15 @@ class Dashboard(TemplateView):
             context = {}
             context["current_user"] = request.user
             context["journeys"] = Journey.objects.filter(creator=request.user.profile, deleted=False)
+
+            # Basic simple stats
+            context["nJourneys"] = Journey.objects.filter(creator=request.user.profile, deleted=False).count()
+            context["nSteps"] = Step.objects.filter(journey__in=Journey.objects.filter(creator=request.user.profile, deleted=False)).count()
+            context["nScans"] = Scan.objects.filter(
+            step__in=Step.objects.filter(
+                journey__in=Journey.objects.filter(creator=request.user.profile))
+            ).count()
+
             return render(request, self.template_name, context)
 
 class Logout(TemplateView):
@@ -30,14 +39,4 @@ class Logout(TemplateView):
 class Register(TemplateView):
 
     def get(self, request):
-        '''
-        user_form = UserForm()
-        profile_form = ProfileForm()
-        return render(request, 'registration/register.html', {
-                'user_form': user_form,
-                'profile_form': profile_form
-            })
-'''
-        return render(request, 'registration/register.html', {
-                'user_form': UserCreationForm(),
-            })
+        return render(request, 'registration/register.html', {'user_form': UserCreationForm(),})
