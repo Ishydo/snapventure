@@ -1,8 +1,8 @@
 
 # My virtual env
 djangoenv/
-*.jpg
-
+snapventure-backend/qrcodes/*
+snapventure-backend/media/*
 
 .env
 *.pyc

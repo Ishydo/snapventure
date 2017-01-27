@@ -1,0 +1,85 @@
+{% extends 'snapventure/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+
+
+  <div class="col-md-12">
+
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="col-md-12">
+          <h2>Public Journey Lists</h2>
+          <p class="lead">
+            Here is the list of public journeys that you can start.
+          </p>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="col-md-12">
+
+    {% for journey in journeys %}
+
+
+    <div class="panel panel-default" style="color: white; background-image: url('{{ journey.img_ambiance.url }}'); background-size: cover;">
+      <div style="background-color: rgba(0,0,0,.3);">
+        <div class="panel-body">
+          <div class="col-md-12">
+            <div class="col-md-9">
+              <h2 style="font-weight: 800;">{{ journey.name }}</h2>
+              <p>
+                <span class="label label-default">Steps : {{ journey.step_set.count }}</span>
+                <span class="label label-default">Subscribers : {{ journey.inscription_set.count }}</span>
+                <span class="label label-default">Scans : {{ journey.inscription_set.count }}</span>
+                <span class="label label-default">Finish : {{ journey.inscription_set.count }}</span>
+              </p>
+            </div>
+            <div class="col-md-3">
+              <div class="btn-group pull-right">
+                <button type="button" class="btn btn-default">Actions</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a href="{% url 'journey_detail' journey.slug %}">Overview</a></li>
+                  <li><a href="{% url 'journey_update' journey.slug %}">Edit Journey</a></li>
+                  <li><a href="{% url 'manage_steps' journey.slug %}">Manage Steps</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="{% url 'journey_delete' journey.slug %}">Delete</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    {% empty %}
+
+
+    <div class="text-center">
+      <i class="fa fa-plus-square" aria-hidden="true" style="font-size: 8em;"></i>
+      <h3>It's time to start !</h3>
+      <p>
+        You do not have any journey yet. Let's go and create your first adventure !
+      </p>
+      <p>
+        <a class="btn btn-default btn-lg" href="{% url 'journey_create' %}" role="button">Create your first journey</a>
+      </p>
+    </div>
+
+    {% endfor %}
+
+  </div>
+</div>
+
+
+{% endblock %}

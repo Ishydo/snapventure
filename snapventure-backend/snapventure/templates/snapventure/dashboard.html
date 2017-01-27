@@ -1,7 +1,11 @@
 {% extends 'snapventure/base.html' %}
 {% load static %}
-{% block content %}
 
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
 
 <div class="jumbotron" style="margin-top: -25px;">
   <div class="container">
@@ -9,59 +13,60 @@
     <p>Snapventure allows you to build and manage journeys for people.</p>
     <p>
       <a class="btn btn-default btn-lg" href="{% url 'journey_create' %}" role="button">Create a new journey</a>
-      <a class="btn btn-default btn-lg" href="{% url 'journey_create' %}" role="button">Manage your journeys</a>
-      <a class="btn btn-default btn-lg" href="{% url 'journey_create' %}" role="button">Statistics and logs</a>
+      <a class="btn btn-default btn-lg" href="{% url 'journey_management' %}" role="button">Manage your journeys</a>
+      <a class="btn btn-default btn-lg" href="{% url 'dashboard_statistics' %}" role="button">Statistics and logs</a>
     </p>
   </div>
 </div>
 
 <div class="container">
-
   <div class="row">
 
-    <div class="col-md-7">
+    <div class="col-md-8">
       <div class="panel panel-default">
         <div class="panel-body">
 
           {% for journey in journeys %}
 
           {% if forloop.first %}
-          <h3><i class="fa fa-compass" aria-hidden="true"></i>&nbsp;Your last journeys</h3>
+          <h3><i class="fa fa-compass" aria-hidden="true"></i>&nbsp;Your 3 last journeys</h3>
           <hr/>
           {% endif %}
 
-          <div class="panel panel-default">
-            <div class="panel-body">
-
-              <div class="col-md-9 col-sm-9">
-                <h3 style="margin-top: 0;">{{journey.name}}</h3>
-                <p>
-                  <span class="label label-default">Steps : {{ journey.step_set.count }}</span>
-                  <span class="label label-default">Subscribers : {{ journey.inscription_set.count }}</span>
-                  <span class="label label-default">Scans : {{ journey.inscription_set.count }}</span>
-                  <span class="label label-default">Finish : {{ journey.inscription_set.count }}</span>
-                </p>
-              </div>
-
-              <div class="col-md-3">
-                <div class="btn-group pull-right">
-                  <button type="button" class="btn btn-default">Actions</button>
-                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="caret"></span>
-                    <span class="sr-only">Toggle Dropdown</span>
-                  </button>
-                  <ul class="dropdown-menu">
-                    <li><a href="{% url 'journey_detail' journey.slug %}">Overview</a></li>
-                    <li><a href="{% url 'journey_update' journey.slug %}">Edit Journey</a></li>
-                    <li><a href="{% url 'manage_steps' journey.slug %}">Manage Steps</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="{% url 'journey_delete' journey.slug %}">Delete</a></li>
-                  </ul>
+          <div class="panel panel-default" style="color: white; background-image: url('{{ journey.img_ambiance.url }}'); background-size: cover;">
+            <div style="background-color: rgba(0,0,0,.3);">
+              <div class="panel-body">
+                <div class="col-md-12">
+                  <div class="col-md-9">
+                    <h2 style="font-weight: 800;">{{ journey.name }}</h2>
+                    <p>
+                      <span class="label label-default">Steps : {{ journey.step_set.count }}</span>
+                      <span class="label label-default">Subscribers : {{ journey.inscription_set.count }}</span>
+                      <span class="label label-default">Scans : {{ journey.inscription_set.count }}</span>
+                      <span class="label label-default">Finish : {{ journey.inscription_set.count }}</span>
+                    </p>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="btn-group pull-right">
+                      <button type="button" class="btn btn-default">Actions</button>
+                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a href="{% url 'journey_detail' journey.slug %}">Overview</a></li>
+                        <li><a href="{% url 'journey_update' journey.slug %}">Edit Journey</a></li>
+                        <li><a href="{% url 'manage_steps' journey.slug %}">Manage Steps</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="{% url 'journey_delete' journey.slug %}">Delete</a></li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </div>
-
             </div>
           </div>
+
 
           {% empty %}
 
@@ -82,29 +87,38 @@
       </div>
     </div>
 
-    <div class="col-md-5">
+    <div class="col-md-4">
 
       <div class="panel panel-default">
         <div class="panel-body">
 
           <h3><i class="fa fa-area-chart" aria-hidden="true"></i>&nbsp;Quick stats</h3>
           <hr/>
-          <p>Total journeys : {{nJourneys}}</p>
-          <p>Total steps : {{nSteps}}</p>
-          <p>Total scans on your steps : {{nScans}}</p>
+
+          <div class="col-md-6 text-center">
+            <h1>{{nJourneys}}</h1>
+            <p>Total journeys</p>
+          </div>
+
+          <div class="col-md-6 text-center">
+            <h1>{{nSteps}}</h1>
+            <p>Total steps</p>
+          </div>
+
+          <div class="col-md-6 text-center">
+            <h1>{{nScans}}</h1>
+            <p>Total scans on your steps</p>
+          </div>
+
+          <div class="col-md-6 text-center">
+            <h1>{{nYScans}}</h1>
+            <p>Total of your scans</p>
+          </div>
 
         </div>
       </div>
     </div>
-
   </div>
-
-
-
-
-
 </div>
-
-
 
 {% endblock %}

@@ -22,32 +22,32 @@
   </div>
 
 
-<div class="col-md-12">
-  {% for journey in object_list %}
+  <div class="col-md-12">
+    {% for journey in object_list %}
 
-  <div class="panel panel-default" style="color: white; background-image: url('{{ journey.img_ambiance.url }}'); background-size: cover;">
+    <div class="panel panel-default" style="color: white; background-image: url('{{ journey.img_ambiance.url }}'); background-size: cover;">
 
-    <div style="background-color: rgba(0,0,0,.3);">
-    <div class="panel-body">
+      <div style="background-color: rgba(0,0,0,.3);">
+        <div class="panel-body">
 
-      <div class="col-md-12">
-        <div class="col-md-2">
-          <img src="{{ journey.img_description.url }}" class="img img-responsive img-rounded">
+          <div class="col-md-12">
+            <div class="col-md-2">
+              <img src="{{ journey.img_description.url }}" class="img img-responsive img-rounded">
+            </div>
+
+            <div class="col-md-10">
+              <h2 style="font-weight: 800;">{{ journey.name }}</h2>
+              <a href="{% url 'journey_detail' journey.slug %}" class="btn btn-default">Overview</a>
+            </div>
+
+          </div>
         </div>
-
-        <div class="col-md-10">
-          <h2 style="font-weight: 800;">{{ journey.name }}</h2>
-          <a href="{% url 'journey_detail' journey.slug %}" class="btn btn-default">Overview</a>
-        </div>
-
       </div>
     </div>
-  </div>
-  </div>
 
-  {% empty %}
-  <li>No articles yet.</li>
-  {% endfor %}
+    {% empty %}
+    <li>No articles yet.</li>
+    {% endfor %}
 
   </div>
 </div>

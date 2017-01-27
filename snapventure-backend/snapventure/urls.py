@@ -40,6 +40,8 @@ urlpatterns = [
     url(r'^dashboard/journey/create', views.JourneyCreateView.as_view(), name="journey_create"),
     url(r'^dashboard/journey/update/(?P<slug>\S+)/$', views.JourneyUpdateView.as_view(), name='journey_update'),
     url(r'^dashboard/journey/delete/(?P<slug>\S+)/$', views.JourneyDeleteView.as_view(), name='journey_delete'),
+    url(r'^dashboard/journey/manage$', views.JourneyManagement.as_view(), name='journey_management'),
+    url(r'^dashboard/statistics$', views.Statistics.as_view(), name='dashboard_statistics'),
 
     url(r'^dashboard/step/create', views.StepCreateView.as_view(), name="step_create"),
 

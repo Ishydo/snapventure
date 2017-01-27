@@ -8,6 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import redirect
 from django.utils import timezone
+from django.shortcuts import render
 
 # Creation de journey
 class JourneyCreateView(CreateView):
@@ -57,6 +58,11 @@ class JourneySubscribe(LoginRequiredMixin, View):
             Inscription(profile=request.user.profile, journey=j).save()
         return redirect('journey_detail', slug=j.slug)
 
+
+class JourneyManagement(LoginRequiredMixin, TemplateView):
+    def get(self, request, *args, **kwargs):
+        journeys = Journey.objects.filter(creator=request.user.profile)
+        return render(request, "snapventure/journey_management.html", {'journeys': journeys})
 
 class JourneyListView(ListView):
     model = Journey

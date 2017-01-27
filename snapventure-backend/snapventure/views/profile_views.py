@@ -5,8 +5,22 @@ from ..forms import UserForm, ProfileForm
 from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin
 
+class Statistics(LoginRequiredMixin, TemplateView):
+    def get(self, request):
+        context = {}
+        context["nJourneys"] = Journey.objects.filter(creator=request.user.profile, deleted=False).count()
+        context["nSteps"] = Step.objects.filter(journey__in=Journey.objects.filter(creator=request.user.profile, deleted=False)).count()
+        context["nScans"] = Scan.objects.filter(
+        step__in=Step.objects.filter(
+            journey__in=Journey.objects.filter(creator=request.user.profile))
+        ).count()
+        context["nYScans"] = Scan.objects.filter(profile= request.user.profile).count()
 
+        context["scanLogs"] = Scan.objects.filter(step__journey__in=Journey.objects.filter(creator=request.user.profile))
+
+        return render(request, "snapventure/dashboard_statistics.html", context)
 
 class Dashboard(TemplateView):
     template_name = "snapventure/dashboard.html"
@@ -17,7 +31,7 @@ class Dashboard(TemplateView):
         else:
             context = {}
             context["current_user"] = request.user
-            context["journeys"] = Journey.objects.filter(creator=request.user.profile, deleted=False)
+            context["journeys"] = Journey.objects.filter(creator=request.user.profile, deleted=False)[:3]
 
             # Basic simple stats
             context["nJourneys"] = Journey.objects.filter(creator=request.user.profile, deleted=False).count()
@@ -26,6 +40,7 @@ class Dashboard(TemplateView):
             step__in=Step.objects.filter(
                 journey__in=Journey.objects.filter(creator=request.user.profile))
             ).count()
+            context["nYScans"] = Scan.objects.filter(profile= request.user.profile).count()
 
             return render(request, self.template_name, context)
 
@@ -37,6 +52,5 @@ class Logout(TemplateView):
         return render(request, self.template_name)
 
 class Register(TemplateView):
-
     def get(self, request):
         return render(request, 'registration/register.html', {'user_form': UserCreationForm(),})

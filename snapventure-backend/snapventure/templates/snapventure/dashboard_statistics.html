@@ -1,0 +1,59 @@
+{% extends 'snapventure/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+
+  <div class="col-md-12">
+
+    <br/>
+    <h2>Quick Stats</h2>
+
+    <div class="col-md-3 text-center">
+      <h1>{{nJourneys}}</h1>
+      <p>Total journeys</p>
+    </div>
+
+    <div class="col-md-3 text-center">
+      <h1>{{nSteps}}</h1>
+      <p>Total steps</p>
+    </div>
+
+    <div class="col-md-3 text-center">
+      <h1>{{nScans}}</h1>
+      <p>Total scans on your steps</p>
+    </div>
+
+    <div class="col-md-3 text-center">
+      <h1>{{nYScans}}</h1>
+      <p>Total of your scans</p>
+    </div>
+
+  </div>
+
+  <div class="col-md-12">
+
+    <br/>
+    <h2>Logs of scan on your journeys</h2>
+
+    {% for scan in scanLogs %}
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="col-md-12">
+          <p>
+          {{scan.created}} - <a href="{% url "journey_detail" scan.step.journey.slug %}">{{scan.step.journey.name}}</a> - <a href="{% url "step_detail" scan.step.slug %}">{{scan.step.name}}</a>
+          </p>
+          </div>
+        </div>
+    </div>
+
+    {% empty %}
+    <li>No scans yet yet.</li>
+    {% endfor %}
+
+  </div>
+</div>
+
+
+{% endblock %}
