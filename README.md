@@ -14,6 +14,8 @@ Le projet contient deux parties distinctes qui sont les suivantes :
 
 ## Mise en place
 
+Pour tester l'application en local avec deux utilisateurs et trois simples parcours d'exemples. Chacune de ces étapes est très importante pour que le tout fonctionne correctement.
+
 Clôner le git et se rendre dans le dossier de la partie backend
 
 ```
@@ -70,9 +72,10 @@ python manage.py runserver
 ## Description de l'API
 
 Les ressources de l'API sont les suivantes :
-
-* Journey : Le parcours qui contient les étapes
-* Step : Les étapes qui constituent un parcours
-* Profile : Les profils utilisateurs
-* Inscription : Les inscriptions des utilisateurs à des parcours
-python manage.py runserver
+```
+http://localhost:8000/api/v1/journey
+http://localhost:8000/api/v1/step
+http://localhost:8000/api/v1/type
+http://localhost:8000/api/v1/scan
+http://localhost:8000/api/v1/profile
+```
