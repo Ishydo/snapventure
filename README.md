@@ -14,30 +14,17 @@ Le projet contient deux parties distinctes qui sont les suivantes :
 
 ## Mise en place
 
-Clôner le git
+Clôner le git et se rendre dans le dossier de la partie backend
 
 ```
 git clone https://github.com/DomDomPow/snapventure.git
-```
-
-
-Se rendre dans le dossier de la partie backend
-
-
-```
 cd snapventure/snapventure-backend
 ```
 
-
-Créer un environnement virtuel 
+Créer un environnement virtuel et l'activer
 
 ```
 virtualenv snapenv
-```
-
-Activer l'environnement
-
-```
 source snapenv/bin/activate
 ```
 
@@ -68,15 +55,10 @@ export DJANGO_DB_HOST="localhost"
 
 ```
 
-Effectuer les migrations
+Effectuer les migrations et loader les données initiales
 ```
 python manage.py migrate
-```
-
-Loader les données de démo 
-
-```
-python manage.py loaddata initial_data
+python manage.py loaddata initial_data.json
 ```
 
 Lancer le server django
