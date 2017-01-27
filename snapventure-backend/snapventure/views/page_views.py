@@ -3,7 +3,6 @@ from django.views.generic import DetailView, ListView, UpdateView, CreateView, T
 from django.shortcuts import render
 
 class Home(TemplateView):
-    template_name = "snapventure/homepage.html"
-
+    ```Homepage simple view```
     def get(self, request):
-        return render(request, self.template_name)
+        return render(request, "snapventure/homepage.html")

@@ -16,50 +16,8 @@ import qrcode
 import base64
 import os
 
-# Creation flow step add steps
-class StepFirstCreateView(CreateView):
-    model = Step
-    form_class = StepForm
-
-    def get(self, request, *args, **kwargs):
-
-        j = Journey.objects.get(slug=self.kwargs['slug']) # The initial value for journey
-        t = Type.objects.get(name="Rich Text") # Initial value for content type in first version
-
-        self.object = None
-        step_form = StepFormSet(queryset=Step.objects.filter(journey=j), initial=[{'journey':j, 'content_type': t}])
-        return self.render_to_response(self.get_context_data(step_form=step_form))
-
-    def post(self, request, *args, **kwargs):
-        self.object = None
-        step_form = StepFormSet(self.request.POST)
-
-        if(step_form.is_valid()):
-
-            j = Journey.objects.get(slug=self.kwargs['slug']) # The journey associated
-            new_steps = []
-
-            for form in step_form:
-                step = form.save(commit=False)
-                step.journey = j
-                step.content_type = Type.objects.get(name="Rich Text") # Default type for v1
-                print("One uuid step is " + str(step.qrcode_uuid))
-                self.create_qrcode(str(step.qrcode_uuid))
-                new_steps.append(step)
-                #step.save()
-            try:
-                with transaction.atomic():
-                    Step.objects.filter(journey=j).delete()
-                    Step.objects.bulk_create(new_steps)
-                    return HttpResponse("Created ok ATOMIC")
-            except IntegrityError:
-                return HttpResponse("Integrity error")
-        else:
-            return HttpResponse("nope")
-
-
-
 class StepCreateView(CreateView):
+    ```Create a new step view```
     model = Step
     form_class = StepForm
     add_another = False
@@ -112,6 +70,9 @@ class StepCreateView(CreateView):
 
 
     def create_qrcode(self, uuid):
+        ```
+        The method that creates a new qrcode image for the created step.
+        ```
         if not os.path.exists("qrcodes/" + uuid + ".jpg"):
             print("QRCODE CREATED")
             qr = qrcode.QRCode(version=5, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=30)
@@ -131,13 +92,19 @@ class StepManageView(TemplateView):
 
 
 class StepDetailView(LoginRequiredMixin, DetailView):
+        ```
+        The logic and tests to process if we can display that step.
+        The conditions to be able to see the content of a step are these :
+         * You must be subscribed to the journey
+         * If step is not root, you must have scanned the previous step
+         * The journey must be active and in time
+        ```
     model = Step
 
     def get(self, request, *args, **kwargs):
 
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
-
         context["scanned"] = Scan.objects.filter(step=self.object, profile=request.user.profile)
 
         if not self.object.final:

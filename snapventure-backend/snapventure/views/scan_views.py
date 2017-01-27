@@ -6,9 +6,14 @@ from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 
-
 class ScanProcessView(TemplateView):
-
+    ```
+    The logic and tests to process when a scan is done by an user.
+    The conditions to be able to see the content of a step are these :
+     * You must be subscribed to the journey
+     * If step is not root, you must have scanned the previous step
+     * The journey must be active and in time
+    ```
     def get(self, request, *args, **kwargs):
         context = {}
         step = Step.objects.get(qrcode_uuid=kwargs["qrcode_uuid"]) # The initial value for journey
