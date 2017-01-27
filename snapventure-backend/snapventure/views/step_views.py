@@ -17,7 +17,7 @@ import base64
 import os
 
 class StepCreateView(CreateView):
-    ```Create a new step view```
+    '''Create a new step view'''
     model = Step
     form_class = StepForm
     add_another = False
@@ -70,9 +70,9 @@ class StepCreateView(CreateView):
 
 
     def create_qrcode(self, uuid):
-        ```
+        '''
         The method that creates a new qrcode image for the created step.
-        ```
+        '''
         if not os.path.exists("qrcodes/" + uuid + ".jpg"):
             print("QRCODE CREATED")
             qr = qrcode.QRCode(version=5, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=30)
@@ -92,13 +92,13 @@ class StepManageView(TemplateView):
 
 
 class StepDetailView(LoginRequiredMixin, DetailView):
-        ```
-        The logic and tests to process if we can display that step.
-        The conditions to be able to see the content of a step are these :
-         * You must be subscribed to the journey
-         * If step is not root, you must have scanned the previous step
-         * The journey must be active and in time
-        ```
+    '''
+    The logic and tests to process if we can display that step.
+    The conditions to be able to see the content of a step are these :
+     * You must be subscribed to the journey
+     * If step is not root, you must have scanned the previous step
+     * The journey must be active and in time
+    '''
     model = Step
 
     def get(self, request, *args, **kwargs):

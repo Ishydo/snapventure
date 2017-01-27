@@ -11,7 +11,7 @@ from django.utils import timezone
 from django.shortcuts import render
 
 class JourneyCreateView(CreateView):
-    ```View for a journey creation```
+    '''View for a journey creation'''
     model = Journey
     form_class = JourneyForm
 
@@ -27,7 +27,7 @@ class JourneyCreateView(CreateView):
         return reverse_lazy('add_journey_step', kwargs={'slug': self.object.slug})
 
 class JourneyDetailView(DetailView):
-    ```View for a journey detail```
+    '''View for a journey detail'''
     model = Journey
 
     def get(self, request, *args, **kwargs):
@@ -44,7 +44,7 @@ class JourneyDetailView(DetailView):
 
 
 class JourneySubscribe(LoginRequiredMixin, View):
-    ```View for a subscribtion toggle```
+    '''View for a subscribtion toggle'''
     def get(self, request, *args, **kwargs):
         j = Journey.objects.get(pk=self.kwargs["pk"])
 
@@ -56,13 +56,13 @@ class JourneySubscribe(LoginRequiredMixin, View):
 
 
 class JourneyManagement(LoginRequiredMixin, TemplateView):
-    ```View to manage a user's personal journeys```
+    '''View to manage a user's personal journeys'''
     def get(self, request, *args, **kwargs):
         journeys = Journey.objects.filter(creator=request.user.profile)
         return render(request, "snapventure/journey_management.html", {'journeys': journeys})
 
 class JourneyListView(ListView):
-    ```The list view for a journey```
+    '''The list view for a journey'''
     model = Journey
 
     def get_context_data(self, **kwargs):
@@ -71,11 +71,11 @@ class JourneyListView(ListView):
         return context
 
 class JourneyUpdateView(UpdateView):
-    ```Journey update view```
+    '''Journey update view'''
     model = Journey
     form_class = JourneyForm
 
 class JourneyDeleteView(DeleteView):
-    ```Delete journey view```
+    '''Delete journey view'''
     model = Journey
     success_url = reverse_lazy('dashboard')

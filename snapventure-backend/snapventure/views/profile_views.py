@@ -8,7 +8,7 @@ from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 class Statistics(LoginRequiredMixin, TemplateView):
-    ```A view for the statistics on dashboard```
+    '''A view for the statistics on dashboard'''
     def get(self, request):
         context = {}
         context["nJourneys"] = Journey.objects.filter(creator=request.user.profile, deleted=False).count()
@@ -22,7 +22,7 @@ class Statistics(LoginRequiredMixin, TemplateView):
         return render(request, "snapventure/dashboard_statistics.html", context)
 
 class Dashboard(LoginRequiredMixin, TemplateView):
-    ```The dashboard view```
+    '''The dashboard view'''
 
     def get(self, request):
         context = {}
@@ -41,13 +41,13 @@ class Dashboard(LoginRequiredMixin, TemplateView):
         return render(request, "snapventure/dashboard.html", context)
 
 class Logout(TemplateView):
-    ```The logout view```
+    '''The logout view'''
 
     def get(self, request):
         logout(request)
         return render(request, "snapventure/homepage.html")
 
 class Register(TemplateView):
-    ```The register view```
+    '''The register view'''
     def get(self, request):
         return render(request, 'registration/register.html', {'user_form': UserCreationForm(),})
