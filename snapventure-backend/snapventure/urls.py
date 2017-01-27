@@ -32,6 +32,8 @@ urlpatterns = [
     # Journey Useradmin Dashboard related routes
     url(r'^journeys$', views.JourneyListView.as_view(), name='journey_list'),
     url(r'^journey/view/(?P<slug>\S+)/$', views.JourneyDetailView.as_view(), name='journey_detail'),
+    url(r'^journey/(?P<pk>\w+)-(?P<slug>[\w-]+)$', views.JourneySubscribe.as_view(), name='journey_subscribe'),
+
     url(r'^step/view/(?P<slug>\S+)/$', views.StepDetailView.as_view(), name="step_detail"),
     url(r'^scan/(?P<qrcode_uuid>\S+)$', views.ScanProcessView.as_view(), name="scan"),
 

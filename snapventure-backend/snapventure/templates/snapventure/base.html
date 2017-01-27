@@ -13,11 +13,12 @@
 
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
- <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,800" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,800" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">
+
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
   <!-- Latest compiled and minified JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
@@ -50,7 +51,7 @@
         </button>
 
         <!-- Branding Image -->
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/">
           Snapventure
         </a>
       </div>
@@ -58,7 +59,8 @@
       <div class="collapse navbar-collapse" id="app-navbar-collapse">
         <!-- Left Side Of Navbar -->
         <ul class="nav navbar-nav">
-          &nbsp;
+          <li><a href="{% url 'journey_list' %}">Journeys</a></li>
+          <li><a href="#">About</a></li>
         </ul>
 
         <!-- Right Side Of Navbar -->
@@ -66,8 +68,18 @@
 
           <!-- Authentication Links -->
           {% if user.is_authenticated %}
-          <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-          <li><a href="{% url 'logout' %}">Logout</a></li>
+
+          <div class="btn-group">
+            <button type="button" class="btn btn-default navbar-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {{ request.user.username }} <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+          </div>
+
           {% else %}
           <li><a href="{% url 'login' %}">Login</a></li>
           <li>

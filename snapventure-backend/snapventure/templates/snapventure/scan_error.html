@@ -1,0 +1,57 @@
+
+{% extends 'snapventure/base.html' %}
+
+{% load static %}
+
+{% block styles %}
+<style>
+
+body{
+  background-color: #d9534f;
+  color: #F8F8F8;
+}
+
+.navbar{
+  margin-bottom: 0;
+}
+
+h1{
+  font-size: 7em;
+  font-family: 'Open Sans';
+  font-weight: 800;
+  letter-spacing: -.1em;
+}
+
+.lead{
+  font-size: 3em;
+  font-weight: 300;
+  font-family: 'Open Sans';
+  letter-spacing: -2px;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+  <div class="col-md-6 col-md-offset-3 col-xs-12">
+    <h1>Woops,</h1>
+    <p class="lead">
+      {{message}}
+
+      {% if previous_step %}
+        You must scan the <b>{{ previous_step.name }}</b> step before this one.
+      {% endif %}
+
+    </p>
+    <a href="/" class="btn btn-default">Back to home</a>
+
+    {% if journey %}
+      <a href="{% url "journey_detail" journey.slug %}" class="btn btn-default">Go on journey page</a>
+    {% endif %}
+
+  </div>
+</div>
+
+{% endblock %}

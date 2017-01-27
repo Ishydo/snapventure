@@ -1,0 +1,19 @@
+body{
+  font-family: 'Open Sans';
+}
+
+.navbar-brand{
+
+  font-weight: 800;
+  font-size: 2.0em;
+  letter-spacing: -2px;
+}
+
+.navbar{
+  padding: 20px;
+  min-height: 0;
+}
+
+.navbar-default .navbar-nav > li > a{
+  font-size: 1.2em;
+}

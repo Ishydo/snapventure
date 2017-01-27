@@ -1,9 +1,12 @@
-from django.views.generic import DetailView, ListView, UpdateView, CreateView, TemplateView, DeleteView
-from ..models import Journey
+from django.views.generic import DetailView, ListView, UpdateView, CreateView, TemplateView, DeleteView, View
+from ..models import Journey, Profile, Inscription
 from ..forms import JourneyForm
 from django.core.urlresolvers import reverse_lazy
 
-from django.http import HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import redirect
 from django.utils import timezone
 
 # Creation de journey
@@ -29,10 +32,31 @@ class JourneyCreateView(CreateView):
 class JourneyDetailView(DetailView):
     model = Journey
 
-    def get_context_data(self, **kwargs):
-        context = super(JourneyDetailView, self).get_context_data(**kwargs)
-        context['now'] = timezone.now()
-        return context
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+
+        if not request.user.is_authenticated:
+            context["register"] = True
+        else:
+            if not Inscription.objects.filter(journey=self.object, profile=request.user.profile).exists():
+                context["subscribe"] = True
+            else:
+                context["subscribe"] = False
+
+        return self.render_to_response(context)
+
+
+class JourneySubscribe(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        j = Journey.objects.get(pk=self.kwargs["pk"])
+
+        if Inscription.objects.filter(profile=request.user.profile, journey=j).exists():
+            Inscription.objects.filter(profile=request.user.profile, journey=j).delete()
+        else:
+            Inscription(profile=request.user.profile, journey=j).save()
+        return redirect('journey_detail', slug=j.slug)
+
 
 class JourneyListView(ListView):
     model = Journey

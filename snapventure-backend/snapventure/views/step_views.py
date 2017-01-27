@@ -1,5 +1,5 @@
 from django.views.generic import DetailView, ListView, UpdateView, CreateView, TemplateView, DeleteView
-from ..models import Step, Journey, Type, Scan
+from ..models import Step, Journey, Type, Scan, Inscription
 from ..forms import StepForm
 from django.core.urlresolvers import reverse_lazy
 
@@ -7,6 +7,8 @@ from django.utils.text import slugify
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils import timezone
 from django.shortcuts import render
+
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.utils import timezone
 
@@ -128,32 +130,34 @@ class StepManageView(TemplateView):
         return render(request, self.template_name, {'journey': j, 'steps': steps})
 
 
-class StepDetailView(DetailView):
+class StepDetailView(LoginRequiredMixin, DetailView):
     model = Step
 
     def get(self, request, *args, **kwargs):
 
-        # TEST SUBSCRIPTION
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
 
-        if not request.user.is_authenticated(): # USer not logged in
-            return HttpResponse("user not auth")
+        if self.object.journey.creator == request.user.profile:                             # Request user is creator ?
+            return self.render_to_response(context)
         else:
-            if self.object.journey.creator == request.user.profile:
-                return self.render_to_response(context)
+            if not self.journey_is_valid(self.object.journey):                              # Journey is valid ?
+                return render(request, "snapventure/scan_error.html", {'message': 'This journey is no more online.'})
             else:
-                if not self.journey_is_valid(self.object.journey):  # Journey is valid ?
-                    return HttpResponse("journey invalid")
+                if not self.journey_in_time(self.object.journey):                           # In time to play ?
+                    return render(request, "snapventure/scan_error.html", {'message': 'This journey is out of time.'})
                 else:
-                    if not self.journey_in_time(self.object.journey):   # In time to play ?
-                        return HttpResponse("journey not in time")
+                    if not self.user_subscribed_to_journey(self.object.journey, request):   # Subscribed to journey ?
+                        return render(request, "snapventure/scan_error.html", {'message': 'You are not subscribed to the journey.', 'journey': self.object.journey})
                     else:
-                        if self.step_is_root(self.object):              # First step ?
+                        if self.step_is_root(self.object):                                  # First step ?
                             return self.render_to_response(context)
                         else:
                             if not self.user_scanned_previous_step(self.object, request):   # Scanned previous ?
-                                return HttpResponse("no scanned previous!")
+                                return render(request, "snapventure/scan_error.html",
+                                {'message': 'You did not scan the previous step.',
+                                'journey': self.object.journey,
+                                'previous_step': Step.objects.get(journey=self.object.journey, order_id=self.object.order_id - 1)})
                             else:
                                 return self.render_to_response(context)
 
@@ -172,6 +176,10 @@ class StepDetailView(DetailView):
 
     def user_scanned_previous_step(self, step, request):
         return Scan.objects.filter(profile=request.user.profile, step=Step.objects.get(journey=step.journey, order_id=step.order_id - 1)).exists()
+
+    def user_subscribed_to_journey(self, journey, request):
+        return Inscription.objects.filter(profile=request.user.profile, journey=journey).exists()
+
 
 class StepUpdateView(UpdateView):
     model = Step

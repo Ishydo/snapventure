@@ -12,6 +12,17 @@
 #map-canvas {
   height: 600px;
 }
+
+h1{
+  font-weight: 800;
+  font-family:'Open Sans';
+  letter-spacing: -2px;
+}
+
+p{
+  font-weight: 400;
+  font-family: 'Open Sans';
+}
 </style>
 {% endblock %}
 
@@ -24,8 +35,19 @@
 
       <div class="col-md-12">
         <h1>{{ object.name }}</h1>
-      </div>
+        {% if register %}
+        <a class="btn btn-default">Create account</a>
+        {% else %}
 
+        {% if subscribe %}
+        <a href="{% url 'journey_subscribe' object.pk object.slug %}" class="btn btn-default">Subscribe</a>
+        {% else %}
+        <a class="btn btn-danger" href="{% url 'journey_subscribe' object.pk object.slug %}">Unsubscribe</a>
+        {% endif %}
+
+        {% endif %}
+
+      </div>
     </div>
   </div>
 </div>
@@ -39,7 +61,7 @@
 
     <div class="list-group">
       {% for step in object.step_set.all|dictsort:"order_id" %}
-        <a href="{% url 'step_detail' step.slug %}" class="list-group-item">Step #{{step.order_id}} - <b>{{step.name}}</b></a>
+      <a href="{% url 'step_detail' step.slug %}" class="list-group-item">Step #{{step.order_id}} - <b>{{step.name}}</b></a>
       {% endfor %}
     </div>
 
@@ -48,23 +70,23 @@
   </div>
 
 
-<!--
+  <!--
   <div class="col-md-3">
 
-    <p>Other informations</p>
+  <p>Other informations</p>
 
-    Creation : {{ object.created }}<br/>
-    Updated : {{ object.last_updated }}<br/>
-    Start time: {{ object.start_time }}<br/>
-    End time:{{ object.end_time }}<br/>
-    Private :{{ object.private }}<br/>
-    Active: {{ object.active }}<br/>
+  Creation : {{ object.created }}<br/>
+  Updated : {{ object.last_updated }}<br/>
+  Start time: {{ object.start_time }}<br/>
+  End time:{{ object.end_time }}<br/>
+  Private :{{ object.private }}<br/>
+  Active: {{ object.active }}<br/>
 
-    <a class="btn btn-default" href="{% url 'journey_list' %}">Journey Listing</a>
-    <a class="btn btn-primary" href="{{object.get_update_url}}">Edit Journey</a>
+  <a class="btn btn-default" href="{% url 'journey_list' %}">Journey Listing</a>
+  <a class="btn btn-primary" href="{{object.get_update_url}}">Edit Journey</a>
 
 
-  </div>
+</div>
 -->
 </div>
 
