@@ -16,6 +16,8 @@ from rest_framework.authtoken.models import Token
 # Triggered whenever user has been created and added to database
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if kwargs.get('raw', False):
+        return False
     if created:
         Token.objects.create(user=instance)
 
@@ -30,12 +32,16 @@ class Profile(models.Model):
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
+    if kwargs.get('raw', False):
+        return False
     if created:
-        Profile.objects.create(user=instance)
+        Profile.objects.create(user=instance).save()
 
+'''
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+    '''
 
 
 class Journey(models.Model):
