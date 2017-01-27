@@ -47,11 +47,36 @@ Installer les dépendances
 pip install -r requirements.txt
 ```
 
-
-Loader les données de démo (+TODO epliquer db & migrations)
+Créer la base de données mysql
 
 ```
-python manage.py loaddata testjourney
+mysql
+>> create database snapventure;
+```
+
+Configurer les variables d'environnement
+
+```
+# ~/.bashrc
+
+export DJANGO_SECRET_KEY="YOUR_KEY"
+export DJANGO_DEBUG=True
+export DJANGO_DB_NAME="snapventure"
+export DJANGO_DB_USER="root"
+export DJANGO_DB_PWD="1234"
+export DJANGO_DB_HOST="localhost"
+
+```
+
+Effectuer les migrations
+```
+python manage.py migrate
+```
+
+Loader les données de démo 
+
+```
+python manage.py loaddata initial_data
 ```
 
 Lancer le server django
