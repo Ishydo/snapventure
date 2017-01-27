@@ -1,5 +1,3 @@
-[![Stories in Ready](https://badge.waffle.io/DomDomPow/snapventure.png?label=ready&title=Ready)](https://waffle.io/DomDomPow/snapventure)
-
 ![](https://infinit8.io/illustrations/snapventure/mapjourneybanneer.jpg)
 
 Il est toujours intéressant pour les curieux d’obtenir des informations additionnelles lorsqu’ils visitent un musée ou qu’ils effectuent une excursion à but éducatif. Nous avons tous ressenti un jour l’excitation d’une chasse au trésor. Et nous nous sommes tous déjà demandé ce que représentent certains monuments et autres œuvres d’art conceptuelles. 
