@@ -138,6 +138,9 @@ class StepDetailView(LoginRequiredMixin, DetailView):
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
 
+        if not self.object.final:
+            context["next_step"] = Step.objects.get(journey=self.object.journey, order_id=self.object.order_id  + 1)
+
         if self.object.journey.creator == request.user.profile:                             # Request user is creator ?
             return self.render_to_response(context)
         else:
