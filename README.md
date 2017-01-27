@@ -14,30 +14,19 @@ Le projet contient deux parties distinctes qui sont les suivantes :
 
 ## Mise en place
 
-Clôner le git
+Pour tester l'application en local avec deux utilisateurs et trois simples parcours d'exemples. Chacune de ces étapes est très importante pour que le tout fonctionne correctement.
+
+Clôner le git et se rendre dans le dossier de la partie backend
 
 ```
 git clone https://github.com/DomDomPow/snapventure.git
-```
-
-
-Se rendre dans le dossier de la partie backend
-
-
-```
 cd snapventure/snapventure-backend
 ```
 
-
-Créer un environnement virtuel 
+Créer un environnement virtuel et l'activer
 
 ```
 virtualenv snapenv
-```
-
-Activer l'environnement
-
-```
 source snapenv/bin/activate
 ```
 
@@ -47,11 +36,31 @@ Installer les dépendances
 pip install -r requirements.txt
 ```
 
-
-Loader les données de démo (+TODO epliquer db & migrations)
+Créer la base de données mysql
 
 ```
-python manage.py loaddata testjourney
+mysql
+>> create database snapventure;
+```
+
+Configurer les variables d'environnement
+
+```
+# ~/.bashrc
+
+export DJANGO_SECRET_KEY="YOUR_KEY"
+export DJANGO_DEBUG=True
+export DJANGO_DB_NAME="snapventure"
+export DJANGO_DB_USER="root"
+export DJANGO_DB_PWD="1234"
+export DJANGO_DB_HOST="localhost"
+
+```
+
+Effectuer les migrations et loader les données initiales
+```
+python manage.py migrate
+python manage.py loaddata initial_data.json
 ```
 
 Lancer le server django
@@ -63,9 +72,10 @@ python manage.py runserver
 ## Description de l'API
 
 Les ressources de l'API sont les suivantes :
-
-* Journey : Le parcours qui contient les étapes
-* Step : Les étapes qui constituent un parcours
-* Profile : Les profils utilisateurs
-* Inscription : Les inscriptions des utilisateurs à des parcours
-python manage.py runserver
+```
+http://localhost:8000/api/v1/journey
+http://localhost:8000/api/v1/step
+http://localhost:8000/api/v1/type
+http://localhost:8000/api/v1/scan
+http://localhost:8000/api/v1/profile
+```
