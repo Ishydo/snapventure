@@ -35,6 +35,10 @@ p{
 
       <div class="col-md-12">
         <h1>{{ object.name }}</h1>
+        {% if scanned %}
+        <span class="label label-success">You scanned this step</span>
+        {% endif %}
+        {{object.qrcode_uuid}}
       </div>
     </div>
   </div>

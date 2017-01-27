@@ -138,6 +138,8 @@ class StepDetailView(LoginRequiredMixin, DetailView):
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
 
+        context["scanned"] = Scan.objects.filter(step=self.object, profile=request.user.profile)
+
         if not self.object.final:
             context["next_step"] = Step.objects.get(journey=self.object.journey, order_id=self.object.order_id  + 1)
 
