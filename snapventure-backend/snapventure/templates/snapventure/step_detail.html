@@ -40,13 +40,14 @@ p{
         {% endif %}
         {{object.qrcode_uuid}}
       </div>
+
     </div>
   </div>
 </div>
 <br/>
 <div class="container">
 
-  <div class="col-md-12" style="font-size: 15pt; text-align:justify;">
+  <div class="col-md-10" style="font-size: 15pt; text-align:justify;">
     {{ object.content_text|safe }}
 
     <hr/>
@@ -61,8 +62,13 @@ p{
 
   </div>
 
+    <div class="col-md-2">
+      <a href="/media/qrcodes/{{object.qrcode_uuid}}.jpg" target="_blank"><img class="img img-responsive" src="/media/qrcodes/{{object.qrcode_uuid}}.jpg" ></a>
+    </div>
 
-{% if not object.final  %}
+
+
+{% if next_step  %}
 
 <h2>The next step is not far away !</h2>
 <p>Get ready for : <b>{{ next_step.name }}</b></p>
@@ -76,7 +82,7 @@ p{
 
 </div>
 
-{% if not object.final  %}
+{% if next_step  %}
 
 <script src="https://maps.googleapis.com/maps/api/js?v=3&sensor=false&key=AIzaSyAj6kuXFBzL_NCXe3LVrAcvbM3Tk93Nimk"></script>
 <script>

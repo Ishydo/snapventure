@@ -7,13 +7,17 @@
 #map-canvas {
   height: 600px;
 }
+
+.navbar{
+  margin-bottom: 0;
+}
 </style>
 {% endblock %}
 
 {% block content %}
 
 
-<div class="container-fluid" style="background-image:url('{{ object.img_ambiance.url }}'); background-size:cover; padding: 0px;">
+<div class="container-fluid" style="background-image:url('{{ journey.img_ambiance.url }}'); background-size:cover; padding: 0px;">
   <div class="container-fluid" style="background-color: rgba(0,0,0,.6); color: white; padding: 5% 0% 5% 0%;">
     <div class="container">
 
@@ -42,6 +46,9 @@
         <span class="pull-right">
         <a href="{% url 'step_update' step.slug %}">Edit</a>
         <a href="{% url 'step_delete' step.slug %}">Delete</a>
+        <div class="col-md-1 pull-right">
+          <a href="/media/qrcodes/{{step.qrcode_uuid}}.jpg" target="_blank"><img class="img img-responsive" src="/media/qrcodes/{{step.qrcode_uuid}}.jpg" ></a>
+        </div>
       </span>
       </div>
     </div>

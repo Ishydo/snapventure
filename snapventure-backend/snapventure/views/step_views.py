@@ -73,14 +73,14 @@ class StepCreateView(CreateView):
         '''
         The method that creates a new qrcode image for the created step.
         '''
-        if not os.path.exists("qrcodes/" + uuid + ".jpg"):
+        if not os.path.exists("media/qrcodes/" + uuid + ".jpg"):
             print("QRCODE CREATED")
             qr = qrcode.QRCode(version=5, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=30)
             qr.add_data("http://localhost:8000/scan/" + uuid)
             qr.make()
 
             img = qr.make_image()
-            img.save("qrcodes/" + uuid + ".jpg", "JPEG")
+            img.save("media/qrcodes/" + uuid + ".jpg", "JPEG")
 
 class StepManageView(TemplateView):
     template_name = "snapventure/steps_manage.html"
@@ -107,7 +107,7 @@ class StepDetailView(LoginRequiredMixin, DetailView):
         context = self.get_context_data(object=self.object)
         context["scanned"] = Scan.objects.filter(step=self.object, profile=request.user.profile)
 
-        if not self.object.final:
+        if Step.objects.filter(journey=self.object.journey, order_id=self.object.order_id  + 1).exists():
             context["next_step"] = Step.objects.get(journey=self.object.journey, order_id=self.object.order_id  + 1)
 
         if self.object.journey.creator == request.user.profile:                             # Request user is creator ?
